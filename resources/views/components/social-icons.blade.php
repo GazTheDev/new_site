@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'flex items-center']) }}>
+<div {{ $attributes->merge(['class' => 'flex items-center ']) }}>
   <a
     href="https://www.facebook.com/gareth.davies.99"
     target="_blank"

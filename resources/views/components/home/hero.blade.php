@@ -3,7 +3,7 @@
   <div class="container">
     <div class="flex flex-wrap -mx-4">
       <div class="w-full lg:w-5/12 px-4">
-        <div class="hero-content">
+        <div class=" animate__animated animate__fadeIn animate__delay-0.5s  hero-content">
           <h1
             class="text-dark dark:text-gray-200 font-bold text-4xl sm:text-[42px] lg:text-[40px] xl:text-[42px] leading-snug mb-6"
           >
@@ -35,12 +35,11 @@
       <div class="w-full lg:w-6/12 px-4">
         <div class="lg:text-right lg:ml-auto">
           <div class="relative inline-block z-10 pt-11 lg:pt-0">
-            <img
-              src="{{ url('/img/gaz.jpg') }}"
-              alt="hero"
-              class="max-w-full lg:ml-auto rounded-lg"
-            />
-            <span class="absolute -left-8 -bottom-8 z-[-1]">
+           
+            <video class=" animate__animated animate__fadeIn animate__delay-1s  max-w-full lg:ml-auto rounded-lg" controls autoplay>
+  <source src="{{ url('/img/intro_video.mp4') }}" type="video/mp4">
+</video>
+            <span class=" absolute -left-8 -bottom-8 z-[-1]">
               <svg
                 width="93"
                 height="93"

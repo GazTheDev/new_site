@@ -17,7 +17,7 @@
             alt="logo"
             class="w-[48px] lg:w-[64px] hidden dark:inline-block"
           />
-          <span class="text-xl xl:text-2xl font-bold text-[#0c7187] dark:text-white">Gareth Davies</span>
+          <span class=" text-xl xl:text-2xl font-bold text-[#0c7187] dark:text-white">Gareth Davies</span>
         </a>
       </div>
       <div class="flex px-4 justify-end items-center w-full">

@@ -12,1258 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ module_default)
 /* harmony export */ });
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
-var __commonJS = (callback, module) => () => {
-  if (!module) {
-    module = {exports: {}};
-    callback(module.exports, module);
-  }
-  return module.exports;
-};
-var __exportStar = (target, module, desc) => {
-  if (module && typeof module === "object" || typeof module === "function") {
-    for (let key of __getOwnPropNames(module))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, {get: () => module[key], enumerable: !(desc = __getOwnPropDesc(module, key)) || desc.enumerable});
-  }
-  return target;
-};
-var __toModule = (module) => {
-  return __exportStar(__markAsModule(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", module && module.__esModule && "default" in module ? {get: () => module.default, enumerable: true} : {value: module, enumerable: true})), module);
-};
-
-// node_modules/@vue/shared/dist/shared.cjs.js
-var require_shared_cjs = __commonJS((exports) => {
-  "use strict";
-  Object.defineProperty(exports, "__esModule", {value: true});
-  function makeMap(str, expectsLowerCase) {
-    const map = Object.create(null);
-    const list = str.split(",");
-    for (let i = 0; i < list.length; i++) {
-      map[list[i]] = true;
-    }
-    return expectsLowerCase ? (val) => !!map[val.toLowerCase()] : (val) => !!map[val];
-  }
-  var PatchFlagNames = {
-    [1]: `TEXT`,
-    [2]: `CLASS`,
-    [4]: `STYLE`,
-    [8]: `PROPS`,
-    [16]: `FULL_PROPS`,
-    [32]: `HYDRATE_EVENTS`,
-    [64]: `STABLE_FRAGMENT`,
-    [128]: `KEYED_FRAGMENT`,
-    [256]: `UNKEYED_FRAGMENT`,
-    [512]: `NEED_PATCH`,
-    [1024]: `DYNAMIC_SLOTS`,
-    [2048]: `DEV_ROOT_FRAGMENT`,
-    [-1]: `HOISTED`,
-    [-2]: `BAIL`
-  };
-  var slotFlagsText = {
-    [1]: "STABLE",
-    [2]: "DYNAMIC",
-    [3]: "FORWARDED"
-  };
-  var GLOBALS_WHITE_LISTED = "Infinity,undefined,NaN,isFinite,isNaN,parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,BigInt";
-  var isGloballyWhitelisted = /* @__PURE__ */ makeMap(GLOBALS_WHITE_LISTED);
-  var range = 2;
-  function generateCodeFrame(source, start2 = 0, end = source.length) {
-    const lines = source.split(/\r?\n/);
-    let count = 0;
-    const res = [];
-    for (let i = 0; i < lines.length; i++) {
-      count += lines[i].length + 1;
-      if (count >= start2) {
-        for (let j = i - range; j <= i + range || end > count; j++) {
-          if (j < 0 || j >= lines.length)
-            continue;
-          const line = j + 1;
-          res.push(`${line}${" ".repeat(Math.max(3 - String(line).length, 0))}|  ${lines[j]}`);
-          const lineLength = lines[j].length;
-          if (j === i) {
-            const pad = start2 - (count - lineLength) + 1;
-            const length = Math.max(1, end > count ? lineLength - pad : end - start2);
-            res.push(`   |  ` + " ".repeat(pad) + "^".repeat(length));
-          } else if (j > i) {
-            if (end > count) {
-              const length = Math.max(Math.min(end - count, lineLength), 1);
-              res.push(`   |  ` + "^".repeat(length));
-            }
-            count += lineLength + 1;
-          }
-        }
-        break;
-      }
-    }
-    return res.join("\n");
-  }
-  var specialBooleanAttrs = `itemscope,allowfullscreen,formnovalidate,ismap,nomodule,novalidate,readonly`;
-  var isSpecialBooleanAttr = /* @__PURE__ */ makeMap(specialBooleanAttrs);
-  var isBooleanAttr2 = /* @__PURE__ */ makeMap(specialBooleanAttrs + `,async,autofocus,autoplay,controls,default,defer,disabled,hidden,loop,open,required,reversed,scoped,seamless,checked,muted,multiple,selected`);
-  var unsafeAttrCharRE = /[>/="'\u0009\u000a\u000c\u0020]/;
-  var attrValidationCache = {};
-  function isSSRSafeAttrName(name) {
-    if (attrValidationCache.hasOwnProperty(name)) {
-      return attrValidationCache[name];
-    }
-    const isUnsafe = unsafeAttrCharRE.test(name);
-    if (isUnsafe) {
-      console.error(`unsafe attribute name: ${name}`);
-    }
-    return attrValidationCache[name] = !isUnsafe;
-  }
-  var propsToAttrMap = {
-    acceptCharset: "accept-charset",
-    className: "class",
-    htmlFor: "for",
-    httpEquiv: "http-equiv"
-  };
-  var isNoUnitNumericStyleProp = /* @__PURE__ */ makeMap(`animation-iteration-count,border-image-outset,border-image-slice,border-image-width,box-flex,box-flex-group,box-ordinal-group,column-count,columns,flex,flex-grow,flex-positive,flex-shrink,flex-negative,flex-order,grid-row,grid-row-end,grid-row-span,grid-row-start,grid-column,grid-column-end,grid-column-span,grid-column-start,font-weight,line-clamp,line-height,opacity,order,orphans,tab-size,widows,z-index,zoom,fill-opacity,flood-opacity,stop-opacity,stroke-dasharray,stroke-dashoffset,stroke-miterlimit,stroke-opacity,stroke-width`);
-  var isKnownAttr = /* @__PURE__ */ makeMap(`accept,accept-charset,accesskey,action,align,allow,alt,async,autocapitalize,autocomplete,autofocus,autoplay,background,bgcolor,border,buffered,capture,challenge,charset,checked,cite,class,code,codebase,color,cols,colspan,content,contenteditable,contextmenu,controls,coords,crossorigin,csp,data,datetime,decoding,default,defer,dir,dirname,disabled,download,draggable,dropzone,enctype,enterkeyhint,for,form,formaction,formenctype,formmethod,formnovalidate,formtarget,headers,height,hidden,high,href,hreflang,http-equiv,icon,id,importance,integrity,ismap,itemprop,keytype,kind,label,lang,language,loading,list,loop,low,manifest,max,maxlength,minlength,media,min,multiple,muted,name,novalidate,open,optimum,pattern,ping,placeholder,poster,preload,radiogroup,readonly,referrerpolicy,rel,required,reversed,rows,rowspan,sandbox,scope,scoped,selected,shape,size,sizes,slot,span,spellcheck,src,srcdoc,srclang,srcset,start,step,style,summary,tabindex,target,title,translate,type,usemap,value,width,wrap`);
-  function normalizeStyle(value) {
-    if (isArray(value)) {
-      const res = {};
-      for (let i = 0; i < value.length; i++) {
-        const item = value[i];
-        const normalized = normalizeStyle(isString(item) ? parseStringStyle(item) : item);
-        if (normalized) {
-          for (const key in normalized) {
-            res[key] = normalized[key];
-          }
-        }
-      }
-      return res;
-    } else if (isObject(value)) {
-      return value;
-    }
-  }
-  var listDelimiterRE = /;(?![^(]*\))/g;
-  var propertyDelimiterRE = /:(.+)/;
-  function parseStringStyle(cssText) {
-    const ret = {};
-    cssText.split(listDelimiterRE).forEach((item) => {
-      if (item) {
-        const tmp = item.split(propertyDelimiterRE);
-        tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
-      }
-    });
-    return ret;
-  }
-  function stringifyStyle(styles) {
-    let ret = "";
-    if (!styles) {
-      return ret;
-    }
-    for (const key in styles) {
-      const value = styles[key];
-      const normalizedKey = key.startsWith(`--`) ? key : hyphenate(key);
-      if (isString(value) || typeof value === "number" && isNoUnitNumericStyleProp(normalizedKey)) {
-        ret += `${normalizedKey}:${value};`;
-      }
-    }
-    return ret;
-  }
-  function normalizeClass(value) {
-    let res = "";
-    if (isString(value)) {
-      res = value;
-    } else if (isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        const normalized = normalizeClass(value[i]);
-        if (normalized) {
-          res += normalized + " ";
-        }
-      }
-    } else if (isObject(value)) {
-      for (const name in value) {
-        if (value[name]) {
-          res += name + " ";
-        }
-      }
-    }
-    return res.trim();
-  }
-  var HTML_TAGS = "html,body,base,head,link,meta,style,title,address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,s,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,embed,object,param,source,canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td,th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,output,progress,select,textarea,details,dialog,menu,summary,template,blockquote,iframe,tfoot";
-  var SVG_TAGS = "svg,animate,animateMotion,animateTransform,circle,clipPath,color-profile,defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistanceLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter,foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask,mesh,meshgradient,meshpatch,meshrow,metadata,mpath,path,pattern,polygon,polyline,radialGradient,rect,set,solidcolor,stop,switch,symbol,text,textPath,title,tspan,unknown,use,view";
-  var VOID_TAGS = "area,base,br,col,embed,hr,img,input,link,meta,param,source,track,wbr";
-  var isHTMLTag = /* @__PURE__ */ makeMap(HTML_TAGS);
-  var isSVGTag = /* @__PURE__ */ makeMap(SVG_TAGS);
-  var isVoidTag = /* @__PURE__ */ makeMap(VOID_TAGS);
-  var escapeRE = /["'&<>]/;
-  function escapeHtml(string) {
-    const str = "" + string;
-    const match = escapeRE.exec(str);
-    if (!match) {
-      return str;
-    }
-    let html = "";
-    let escaped;
-    let index;
-    let lastIndex = 0;
-    for (index = match.index; index < str.length; index++) {
-      switch (str.charCodeAt(index)) {
-        case 34:
-          escaped = "&quot;";
-          break;
-        case 38:
-          escaped = "&amp;";
-          break;
-        case 39:
-          escaped = "&#39;";
-          break;
-        case 60:
-          escaped = "&lt;";
-          break;
-        case 62:
-          escaped = "&gt;";
-          break;
-        default:
-          continue;
-      }
-      if (lastIndex !== index) {
-        html += str.substring(lastIndex, index);
-      }
-      lastIndex = index + 1;
-      html += escaped;
-    }
-    return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
-  }
-  var commentStripRE = /^-?>|<!--|-->|--!>|<!-$/g;
-  function escapeHtmlComment(src) {
-    return src.replace(commentStripRE, "");
-  }
-  function looseCompareArrays(a, b) {
-    if (a.length !== b.length)
-      return false;
-    let equal = true;
-    for (let i = 0; equal && i < a.length; i++) {
-      equal = looseEqual(a[i], b[i]);
-    }
-    return equal;
-  }
-  function looseEqual(a, b) {
-    if (a === b)
-      return true;
-    let aValidType = isDate(a);
-    let bValidType = isDate(b);
-    if (aValidType || bValidType) {
-      return aValidType && bValidType ? a.getTime() === b.getTime() : false;
-    }
-    aValidType = isArray(a);
-    bValidType = isArray(b);
-    if (aValidType || bValidType) {
-      return aValidType && bValidType ? looseCompareArrays(a, b) : false;
-    }
-    aValidType = isObject(a);
-    bValidType = isObject(b);
-    if (aValidType || bValidType) {
-      if (!aValidType || !bValidType) {
-        return false;
-      }
-      const aKeysCount = Object.keys(a).length;
-      const bKeysCount = Object.keys(b).length;
-      if (aKeysCount !== bKeysCount) {
-        return false;
-      }
-      for (const key in a) {
-        const aHasKey = a.hasOwnProperty(key);
-        const bHasKey = b.hasOwnProperty(key);
-        if (aHasKey && !bHasKey || !aHasKey && bHasKey || !looseEqual(a[key], b[key])) {
-          return false;
-        }
-      }
-    }
-    return String(a) === String(b);
-  }
-  function looseIndexOf(arr, val) {
-    return arr.findIndex((item) => looseEqual(item, val));
-  }
-  var toDisplayString = (val) => {
-    return val == null ? "" : isObject(val) ? JSON.stringify(val, replacer, 2) : String(val);
-  };
-  var replacer = (_key, val) => {
-    if (isMap(val)) {
-      return {
-        [`Map(${val.size})`]: [...val.entries()].reduce((entries, [key, val2]) => {
-          entries[`${key} =>`] = val2;
-          return entries;
-        }, {})
-      };
-    } else if (isSet(val)) {
-      return {
-        [`Set(${val.size})`]: [...val.values()]
-      };
-    } else if (isObject(val) && !isArray(val) && !isPlainObject(val)) {
-      return String(val);
-    }
-    return val;
-  };
-  var babelParserDefaultPlugins = [
-    "bigInt",
-    "optionalChaining",
-    "nullishCoalescingOperator"
-  ];
-  var EMPTY_OBJ = Object.freeze({});
-  var EMPTY_ARR = Object.freeze([]);
-  var NOOP = () => {
-  };
-  var NO = () => false;
-  var onRE = /^on[^a-z]/;
-  var isOn = (key) => onRE.test(key);
-  var isModelListener = (key) => key.startsWith("onUpdate:");
-  var extend = Object.assign;
-  var remove = (arr, el) => {
-    const i = arr.indexOf(el);
-    if (i > -1) {
-      arr.splice(i, 1);
-    }
-  };
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
-  var hasOwn = (val, key) => hasOwnProperty.call(val, key);
-  var isArray = Array.isArray;
-  var isMap = (val) => toTypeString(val) === "[object Map]";
-  var isSet = (val) => toTypeString(val) === "[object Set]";
-  var isDate = (val) => val instanceof Date;
-  var isFunction = (val) => typeof val === "function";
-  var isString = (val) => typeof val === "string";
-  var isSymbol = (val) => typeof val === "symbol";
-  var isObject = (val) => val !== null && typeof val === "object";
-  var isPromise = (val) => {
-    return isObject(val) && isFunction(val.then) && isFunction(val.catch);
-  };
-  var objectToString = Object.prototype.toString;
-  var toTypeString = (value) => objectToString.call(value);
-  var toRawType = (value) => {
-    return toTypeString(value).slice(8, -1);
-  };
-  var isPlainObject = (val) => toTypeString(val) === "[object Object]";
-  var isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
-  var isReservedProp = /* @__PURE__ */ makeMap(",key,ref,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted");
-  var cacheStringFunction = (fn) => {
-    const cache = Object.create(null);
-    return (str) => {
-      const hit = cache[str];
-      return hit || (cache[str] = fn(str));
-    };
-  };
-  var camelizeRE = /-(\w)/g;
-  var camelize = cacheStringFunction((str) => {
-    return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : "");
-  });
-  var hyphenateRE = /\B([A-Z])/g;
-  var hyphenate = cacheStringFunction((str) => str.replace(hyphenateRE, "-$1").toLowerCase());
-  var capitalize = cacheStringFunction((str) => str.charAt(0).toUpperCase() + str.slice(1));
-  var toHandlerKey = cacheStringFunction((str) => str ? `on${capitalize(str)}` : ``);
-  var hasChanged = (value, oldValue) => value !== oldValue && (value === value || oldValue === oldValue);
-  var invokeArrayFns = (fns, arg) => {
-    for (let i = 0; i < fns.length; i++) {
-      fns[i](arg);
-    }
-  };
-  var def = (obj, key, value) => {
-    Object.defineProperty(obj, key, {
-      configurable: true,
-      enumerable: false,
-      value
-    });
-  };
-  var toNumber = (val) => {
-    const n = parseFloat(val);
-    return isNaN(n) ? val : n;
-  };
-  var _globalThis;
-  var getGlobalThis = () => {
-    return _globalThis || (_globalThis = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : typeof __webpack_require__.g !== "undefined" ? __webpack_require__.g : {});
-  };
-  exports.EMPTY_ARR = EMPTY_ARR;
-  exports.EMPTY_OBJ = EMPTY_OBJ;
-  exports.NO = NO;
-  exports.NOOP = NOOP;
-  exports.PatchFlagNames = PatchFlagNames;
-  exports.babelParserDefaultPlugins = babelParserDefaultPlugins;
-  exports.camelize = camelize;
-  exports.capitalize = capitalize;
-  exports.def = def;
-  exports.escapeHtml = escapeHtml;
-  exports.escapeHtmlComment = escapeHtmlComment;
-  exports.extend = extend;
-  exports.generateCodeFrame = generateCodeFrame;
-  exports.getGlobalThis = getGlobalThis;
-  exports.hasChanged = hasChanged;
-  exports.hasOwn = hasOwn;
-  exports.hyphenate = hyphenate;
-  exports.invokeArrayFns = invokeArrayFns;
-  exports.isArray = isArray;
-  exports.isBooleanAttr = isBooleanAttr2;
-  exports.isDate = isDate;
-  exports.isFunction = isFunction;
-  exports.isGloballyWhitelisted = isGloballyWhitelisted;
-  exports.isHTMLTag = isHTMLTag;
-  exports.isIntegerKey = isIntegerKey;
-  exports.isKnownAttr = isKnownAttr;
-  exports.isMap = isMap;
-  exports.isModelListener = isModelListener;
-  exports.isNoUnitNumericStyleProp = isNoUnitNumericStyleProp;
-  exports.isObject = isObject;
-  exports.isOn = isOn;
-  exports.isPlainObject = isPlainObject;
-  exports.isPromise = isPromise;
-  exports.isReservedProp = isReservedProp;
-  exports.isSSRSafeAttrName = isSSRSafeAttrName;
-  exports.isSVGTag = isSVGTag;
-  exports.isSet = isSet;
-  exports.isSpecialBooleanAttr = isSpecialBooleanAttr;
-  exports.isString = isString;
-  exports.isSymbol = isSymbol;
-  exports.isVoidTag = isVoidTag;
-  exports.looseEqual = looseEqual;
-  exports.looseIndexOf = looseIndexOf;
-  exports.makeMap = makeMap;
-  exports.normalizeClass = normalizeClass;
-  exports.normalizeStyle = normalizeStyle;
-  exports.objectToString = objectToString;
-  exports.parseStringStyle = parseStringStyle;
-  exports.propsToAttrMap = propsToAttrMap;
-  exports.remove = remove;
-  exports.slotFlagsText = slotFlagsText;
-  exports.stringifyStyle = stringifyStyle;
-  exports.toDisplayString = toDisplayString;
-  exports.toHandlerKey = toHandlerKey;
-  exports.toNumber = toNumber;
-  exports.toRawType = toRawType;
-  exports.toTypeString = toTypeString;
-});
-
-// node_modules/@vue/shared/index.js
-var require_shared = __commonJS((exports, module) => {
-  "use strict";
-  if (false) {} else {
-    module.exports = require_shared_cjs();
-  }
-});
-
-// node_modules/@vue/reactivity/dist/reactivity.cjs.js
-var require_reactivity_cjs = __commonJS((exports) => {
-  "use strict";
-  Object.defineProperty(exports, "__esModule", {value: true});
-  var shared = require_shared();
-  var targetMap = new WeakMap();
-  var effectStack = [];
-  var activeEffect;
-  var ITERATE_KEY = Symbol("iterate");
-  var MAP_KEY_ITERATE_KEY = Symbol("Map key iterate");
-  function isEffect(fn) {
-    return fn && fn._isEffect === true;
-  }
-  function effect3(fn, options = shared.EMPTY_OBJ) {
-    if (isEffect(fn)) {
-      fn = fn.raw;
-    }
-    const effect4 = createReactiveEffect(fn, options);
-    if (!options.lazy) {
-      effect4();
-    }
-    return effect4;
-  }
-  function stop2(effect4) {
-    if (effect4.active) {
-      cleanup(effect4);
-      if (effect4.options.onStop) {
-        effect4.options.onStop();
-      }
-      effect4.active = false;
-    }
-  }
-  var uid = 0;
-  function createReactiveEffect(fn, options) {
-    const effect4 = function reactiveEffect() {
-      if (!effect4.active) {
-        return fn();
-      }
-      if (!effectStack.includes(effect4)) {
-        cleanup(effect4);
-        try {
-          enableTracking();
-          effectStack.push(effect4);
-          activeEffect = effect4;
-          return fn();
-        } finally {
-          effectStack.pop();
-          resetTracking();
-          activeEffect = effectStack[effectStack.length - 1];
-        }
-      }
-    };
-    effect4.id = uid++;
-    effect4.allowRecurse = !!options.allowRecurse;
-    effect4._isEffect = true;
-    effect4.active = true;
-    effect4.raw = fn;
-    effect4.deps = [];
-    effect4.options = options;
-    return effect4;
-  }
-  function cleanup(effect4) {
-    const {deps} = effect4;
-    if (deps.length) {
-      for (let i = 0; i < deps.length; i++) {
-        deps[i].delete(effect4);
-      }
-      deps.length = 0;
-    }
-  }
-  var shouldTrack = true;
-  var trackStack = [];
-  function pauseTracking() {
-    trackStack.push(shouldTrack);
-    shouldTrack = false;
-  }
-  function enableTracking() {
-    trackStack.push(shouldTrack);
-    shouldTrack = true;
-  }
-  function resetTracking() {
-    const last = trackStack.pop();
-    shouldTrack = last === void 0 ? true : last;
-  }
-  function track(target, type, key) {
-    if (!shouldTrack || activeEffect === void 0) {
-      return;
-    }
-    let depsMap = targetMap.get(target);
-    if (!depsMap) {
-      targetMap.set(target, depsMap = new Map());
-    }
-    let dep = depsMap.get(key);
-    if (!dep) {
-      depsMap.set(key, dep = new Set());
-    }
-    if (!dep.has(activeEffect)) {
-      dep.add(activeEffect);
-      activeEffect.deps.push(dep);
-      if (activeEffect.options.onTrack) {
-        activeEffect.options.onTrack({
-          effect: activeEffect,
-          target,
-          type,
-          key
-        });
-      }
-    }
-  }
-  function trigger(target, type, key, newValue, oldValue, oldTarget) {
-    const depsMap = targetMap.get(target);
-    if (!depsMap) {
-      return;
-    }
-    const effects = new Set();
-    const add2 = (effectsToAdd) => {
-      if (effectsToAdd) {
-        effectsToAdd.forEach((effect4) => {
-          if (effect4 !== activeEffect || effect4.allowRecurse) {
-            effects.add(effect4);
-          }
-        });
-      }
-    };
-    if (type === "clear") {
-      depsMap.forEach(add2);
-    } else if (key === "length" && shared.isArray(target)) {
-      depsMap.forEach((dep, key2) => {
-        if (key2 === "length" || key2 >= newValue) {
-          add2(dep);
-        }
-      });
-    } else {
-      if (key !== void 0) {
-        add2(depsMap.get(key));
-      }
-      switch (type) {
-        case "add":
-          if (!shared.isArray(target)) {
-            add2(depsMap.get(ITERATE_KEY));
-            if (shared.isMap(target)) {
-              add2(depsMap.get(MAP_KEY_ITERATE_KEY));
-            }
-          } else if (shared.isIntegerKey(key)) {
-            add2(depsMap.get("length"));
-          }
-          break;
-        case "delete":
-          if (!shared.isArray(target)) {
-            add2(depsMap.get(ITERATE_KEY));
-            if (shared.isMap(target)) {
-              add2(depsMap.get(MAP_KEY_ITERATE_KEY));
-            }
-          }
-          break;
-        case "set":
-          if (shared.isMap(target)) {
-            add2(depsMap.get(ITERATE_KEY));
-          }
-          break;
-      }
-    }
-    const run = (effect4) => {
-      if (effect4.options.onTrigger) {
-        effect4.options.onTrigger({
-          effect: effect4,
-          target,
-          key,
-          type,
-          newValue,
-          oldValue,
-          oldTarget
-        });
-      }
-      if (effect4.options.scheduler) {
-        effect4.options.scheduler(effect4);
-      } else {
-        effect4();
-      }
-    };
-    effects.forEach(run);
-  }
-  var isNonTrackableKeys = /* @__PURE__ */ shared.makeMap(`__proto__,__v_isRef,__isVue`);
-  var builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key) => Symbol[key]).filter(shared.isSymbol));
-  var get2 = /* @__PURE__ */ createGetter();
-  var shallowGet = /* @__PURE__ */ createGetter(false, true);
-  var readonlyGet = /* @__PURE__ */ createGetter(true);
-  var shallowReadonlyGet = /* @__PURE__ */ createGetter(true, true);
-  var arrayInstrumentations = {};
-  ["includes", "indexOf", "lastIndexOf"].forEach((key) => {
-    const method = Array.prototype[key];
-    arrayInstrumentations[key] = function(...args) {
-      const arr = toRaw2(this);
-      for (let i = 0, l = this.length; i < l; i++) {
-        track(arr, "get", i + "");
-      }
-      const res = method.apply(arr, args);
-      if (res === -1 || res === false) {
-        return method.apply(arr, args.map(toRaw2));
-      } else {
-        return res;
-      }
-    };
-  });
-  ["push", "pop", "shift", "unshift", "splice"].forEach((key) => {
-    const method = Array.prototype[key];
-    arrayInstrumentations[key] = function(...args) {
-      pauseTracking();
-      const res = method.apply(this, args);
-      resetTracking();
-      return res;
-    };
-  });
-  function createGetter(isReadonly2 = false, shallow = false) {
-    return function get3(target, key, receiver) {
-      if (key === "__v_isReactive") {
-        return !isReadonly2;
-      } else if (key === "__v_isReadonly") {
-        return isReadonly2;
-      } else if (key === "__v_raw" && receiver === (isReadonly2 ? shallow ? shallowReadonlyMap : readonlyMap : shallow ? shallowReactiveMap : reactiveMap).get(target)) {
-        return target;
-      }
-      const targetIsArray = shared.isArray(target);
-      if (!isReadonly2 && targetIsArray && shared.hasOwn(arrayInstrumentations, key)) {
-        return Reflect.get(arrayInstrumentations, key, receiver);
-      }
-      const res = Reflect.get(target, key, receiver);
-      if (shared.isSymbol(key) ? builtInSymbols.has(key) : isNonTrackableKeys(key)) {
-        return res;
-      }
-      if (!isReadonly2) {
-        track(target, "get", key);
-      }
-      if (shallow) {
-        return res;
-      }
-      if (isRef(res)) {
-        const shouldUnwrap = !targetIsArray || !shared.isIntegerKey(key);
-        return shouldUnwrap ? res.value : res;
-      }
-      if (shared.isObject(res)) {
-        return isReadonly2 ? readonly(res) : reactive3(res);
-      }
-      return res;
-    };
-  }
-  var set2 = /* @__PURE__ */ createSetter();
-  var shallowSet = /* @__PURE__ */ createSetter(true);
-  function createSetter(shallow = false) {
-    return function set3(target, key, value, receiver) {
-      let oldValue = target[key];
-      if (!shallow) {
-        value = toRaw2(value);
-        oldValue = toRaw2(oldValue);
-        if (!shared.isArray(target) && isRef(oldValue) && !isRef(value)) {
-          oldValue.value = value;
-          return true;
-        }
-      }
-      const hadKey = shared.isArray(target) && shared.isIntegerKey(key) ? Number(key) < target.length : shared.hasOwn(target, key);
-      const result = Reflect.set(target, key, value, receiver);
-      if (target === toRaw2(receiver)) {
-        if (!hadKey) {
-          trigger(target, "add", key, value);
-        } else if (shared.hasChanged(value, oldValue)) {
-          trigger(target, "set", key, value, oldValue);
-        }
-      }
-      return result;
-    };
-  }
-  function deleteProperty(target, key) {
-    const hadKey = shared.hasOwn(target, key);
-    const oldValue = target[key];
-    const result = Reflect.deleteProperty(target, key);
-    if (result && hadKey) {
-      trigger(target, "delete", key, void 0, oldValue);
-    }
-    return result;
-  }
-  function has(target, key) {
-    const result = Reflect.has(target, key);
-    if (!shared.isSymbol(key) || !builtInSymbols.has(key)) {
-      track(target, "has", key);
-    }
-    return result;
-  }
-  function ownKeys(target) {
-    track(target, "iterate", shared.isArray(target) ? "length" : ITERATE_KEY);
-    return Reflect.ownKeys(target);
-  }
-  var mutableHandlers = {
-    get: get2,
-    set: set2,
-    deleteProperty,
-    has,
-    ownKeys
-  };
-  var readonlyHandlers = {
-    get: readonlyGet,
-    set(target, key) {
-      {
-        console.warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
-      }
-      return true;
-    },
-    deleteProperty(target, key) {
-      {
-        console.warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
-      }
-      return true;
-    }
-  };
-  var shallowReactiveHandlers = shared.extend({}, mutableHandlers, {
-    get: shallowGet,
-    set: shallowSet
-  });
-  var shallowReadonlyHandlers = shared.extend({}, readonlyHandlers, {
-    get: shallowReadonlyGet
-  });
-  var toReactive = (value) => shared.isObject(value) ? reactive3(value) : value;
-  var toReadonly = (value) => shared.isObject(value) ? readonly(value) : value;
-  var toShallow = (value) => value;
-  var getProto = (v) => Reflect.getPrototypeOf(v);
-  function get$1(target, key, isReadonly2 = false, isShallow = false) {
-    target = target["__v_raw"];
-    const rawTarget = toRaw2(target);
-    const rawKey = toRaw2(key);
-    if (key !== rawKey) {
-      !isReadonly2 && track(rawTarget, "get", key);
-    }
-    !isReadonly2 && track(rawTarget, "get", rawKey);
-    const {has: has2} = getProto(rawTarget);
-    const wrap = isShallow ? toShallow : isReadonly2 ? toReadonly : toReactive;
-    if (has2.call(rawTarget, key)) {
-      return wrap(target.get(key));
-    } else if (has2.call(rawTarget, rawKey)) {
-      return wrap(target.get(rawKey));
-    } else if (target !== rawTarget) {
-      target.get(key);
-    }
-  }
-  function has$1(key, isReadonly2 = false) {
-    const target = this["__v_raw"];
-    const rawTarget = toRaw2(target);
-    const rawKey = toRaw2(key);
-    if (key !== rawKey) {
-      !isReadonly2 && track(rawTarget, "has", key);
-    }
-    !isReadonly2 && track(rawTarget, "has", rawKey);
-    return key === rawKey ? target.has(key) : target.has(key) || target.has(rawKey);
-  }
-  function size(target, isReadonly2 = false) {
-    target = target["__v_raw"];
-    !isReadonly2 && track(toRaw2(target), "iterate", ITERATE_KEY);
-    return Reflect.get(target, "size", target);
-  }
-  function add(value) {
-    value = toRaw2(value);
-    const target = toRaw2(this);
-    const proto = getProto(target);
-    const hadKey = proto.has.call(target, value);
-    if (!hadKey) {
-      target.add(value);
-      trigger(target, "add", value, value);
-    }
-    return this;
-  }
-  function set$1(key, value) {
-    value = toRaw2(value);
-    const target = toRaw2(this);
-    const {has: has2, get: get3} = getProto(target);
-    let hadKey = has2.call(target, key);
-    if (!hadKey) {
-      key = toRaw2(key);
-      hadKey = has2.call(target, key);
-    } else {
-      checkIdentityKeys(target, has2, key);
-    }
-    const oldValue = get3.call(target, key);
-    target.set(key, value);
-    if (!hadKey) {
-      trigger(target, "add", key, value);
-    } else if (shared.hasChanged(value, oldValue)) {
-      trigger(target, "set", key, value, oldValue);
-    }
-    return this;
-  }
-  function deleteEntry(key) {
-    const target = toRaw2(this);
-    const {has: has2, get: get3} = getProto(target);
-    let hadKey = has2.call(target, key);
-    if (!hadKey) {
-      key = toRaw2(key);
-      hadKey = has2.call(target, key);
-    } else {
-      checkIdentityKeys(target, has2, key);
-    }
-    const oldValue = get3 ? get3.call(target, key) : void 0;
-    const result = target.delete(key);
-    if (hadKey) {
-      trigger(target, "delete", key, void 0, oldValue);
-    }
-    return result;
-  }
-  function clear() {
-    const target = toRaw2(this);
-    const hadItems = target.size !== 0;
-    const oldTarget = shared.isMap(target) ? new Map(target) : new Set(target);
-    const result = target.clear();
-    if (hadItems) {
-      trigger(target, "clear", void 0, void 0, oldTarget);
-    }
-    return result;
-  }
-  function createForEach(isReadonly2, isShallow) {
-    return function forEach(callback, thisArg) {
-      const observed = this;
-      const target = observed["__v_raw"];
-      const rawTarget = toRaw2(target);
-      const wrap = isShallow ? toShallow : isReadonly2 ? toReadonly : toReactive;
-      !isReadonly2 && track(rawTarget, "iterate", ITERATE_KEY);
-      return target.forEach((value, key) => {
-        return callback.call(thisArg, wrap(value), wrap(key), observed);
-      });
-    };
-  }
-  function createIterableMethod(method, isReadonly2, isShallow) {
-    return function(...args) {
-      const target = this["__v_raw"];
-      const rawTarget = toRaw2(target);
-      const targetIsMap = shared.isMap(rawTarget);
-      const isPair = method === "entries" || method === Symbol.iterator && targetIsMap;
-      const isKeyOnly = method === "keys" && targetIsMap;
-      const innerIterator = target[method](...args);
-      const wrap = isShallow ? toShallow : isReadonly2 ? toReadonly : toReactive;
-      !isReadonly2 && track(rawTarget, "iterate", isKeyOnly ? MAP_KEY_ITERATE_KEY : ITERATE_KEY);
-      return {
-        next() {
-          const {value, done} = innerIterator.next();
-          return done ? {value, done} : {
-            value: isPair ? [wrap(value[0]), wrap(value[1])] : wrap(value),
-            done
-          };
-        },
-        [Symbol.iterator]() {
-          return this;
-        }
-      };
-    };
-  }
-  function createReadonlyMethod(type) {
-    return function(...args) {
-      {
-        const key = args[0] ? `on key "${args[0]}" ` : ``;
-        console.warn(`${shared.capitalize(type)} operation ${key}failed: target is readonly.`, toRaw2(this));
-      }
-      return type === "delete" ? false : this;
-    };
-  }
-  var mutableInstrumentations = {
-    get(key) {
-      return get$1(this, key);
-    },
-    get size() {
-      return size(this);
-    },
-    has: has$1,
-    add,
-    set: set$1,
-    delete: deleteEntry,
-    clear,
-    forEach: createForEach(false, false)
-  };
-  var shallowInstrumentations = {
-    get(key) {
-      return get$1(this, key, false, true);
-    },
-    get size() {
-      return size(this);
-    },
-    has: has$1,
-    add,
-    set: set$1,
-    delete: deleteEntry,
-    clear,
-    forEach: createForEach(false, true)
-  };
-  var readonlyInstrumentations = {
-    get(key) {
-      return get$1(this, key, true);
-    },
-    get size() {
-      return size(this, true);
-    },
-    has(key) {
-      return has$1.call(this, key, true);
-    },
-    add: createReadonlyMethod("add"),
-    set: createReadonlyMethod("set"),
-    delete: createReadonlyMethod("delete"),
-    clear: createReadonlyMethod("clear"),
-    forEach: createForEach(true, false)
-  };
-  var shallowReadonlyInstrumentations = {
-    get(key) {
-      return get$1(this, key, true, true);
-    },
-    get size() {
-      return size(this, true);
-    },
-    has(key) {
-      return has$1.call(this, key, true);
-    },
-    add: createReadonlyMethod("add"),
-    set: createReadonlyMethod("set"),
-    delete: createReadonlyMethod("delete"),
-    clear: createReadonlyMethod("clear"),
-    forEach: createForEach(true, true)
-  };
-  var iteratorMethods = ["keys", "values", "entries", Symbol.iterator];
-  iteratorMethods.forEach((method) => {
-    mutableInstrumentations[method] = createIterableMethod(method, false, false);
-    readonlyInstrumentations[method] = createIterableMethod(method, true, false);
-    shallowInstrumentations[method] = createIterableMethod(method, false, true);
-    shallowReadonlyInstrumentations[method] = createIterableMethod(method, true, true);
-  });
-  function createInstrumentationGetter(isReadonly2, shallow) {
-    const instrumentations = shallow ? isReadonly2 ? shallowReadonlyInstrumentations : shallowInstrumentations : isReadonly2 ? readonlyInstrumentations : mutableInstrumentations;
-    return (target, key, receiver) => {
-      if (key === "__v_isReactive") {
-        return !isReadonly2;
-      } else if (key === "__v_isReadonly") {
-        return isReadonly2;
-      } else if (key === "__v_raw") {
-        return target;
-      }
-      return Reflect.get(shared.hasOwn(instrumentations, key) && key in target ? instrumentations : target, key, receiver);
-    };
-  }
-  var mutableCollectionHandlers = {
-    get: createInstrumentationGetter(false, false)
-  };
-  var shallowCollectionHandlers = {
-    get: createInstrumentationGetter(false, true)
-  };
-  var readonlyCollectionHandlers = {
-    get: createInstrumentationGetter(true, false)
-  };
-  var shallowReadonlyCollectionHandlers = {
-    get: createInstrumentationGetter(true, true)
-  };
-  function checkIdentityKeys(target, has2, key) {
-    const rawKey = toRaw2(key);
-    if (rawKey !== key && has2.call(target, rawKey)) {
-      const type = shared.toRawType(target);
-      console.warn(`Reactive ${type} contains both the raw and reactive versions of the same object${type === `Map` ? ` as keys` : ``}, which can lead to inconsistencies. Avoid differentiating between the raw and reactive versions of an object and only use the reactive version if possible.`);
-    }
-  }
-  var reactiveMap = new WeakMap();
-  var shallowReactiveMap = new WeakMap();
-  var readonlyMap = new WeakMap();
-  var shallowReadonlyMap = new WeakMap();
-  function targetTypeMap(rawType) {
-    switch (rawType) {
-      case "Object":
-      case "Array":
-        return 1;
-      case "Map":
-      case "Set":
-      case "WeakMap":
-      case "WeakSet":
-        return 2;
-      default:
-        return 0;
-    }
-  }
-  function getTargetType(value) {
-    return value["__v_skip"] || !Object.isExtensible(value) ? 0 : targetTypeMap(shared.toRawType(value));
-  }
-  function reactive3(target) {
-    if (target && target["__v_isReadonly"]) {
-      return target;
-    }
-    return createReactiveObject(target, false, mutableHandlers, mutableCollectionHandlers, reactiveMap);
-  }
-  function shallowReactive(target) {
-    return createReactiveObject(target, false, shallowReactiveHandlers, shallowCollectionHandlers, shallowReactiveMap);
-  }
-  function readonly(target) {
-    return createReactiveObject(target, true, readonlyHandlers, readonlyCollectionHandlers, readonlyMap);
-  }
-  function shallowReadonly(target) {
-    return createReactiveObject(target, true, shallowReadonlyHandlers, shallowReadonlyCollectionHandlers, shallowReadonlyMap);
-  }
-  function createReactiveObject(target, isReadonly2, baseHandlers, collectionHandlers, proxyMap) {
-    if (!shared.isObject(target)) {
-      {
-        console.warn(`value cannot be made reactive: ${String(target)}`);
-      }
-      return target;
-    }
-    if (target["__v_raw"] && !(isReadonly2 && target["__v_isReactive"])) {
-      return target;
-    }
-    const existingProxy = proxyMap.get(target);
-    if (existingProxy) {
-      return existingProxy;
-    }
-    const targetType = getTargetType(target);
-    if (targetType === 0) {
-      return target;
-    }
-    const proxy = new Proxy(target, targetType === 2 ? collectionHandlers : baseHandlers);
-    proxyMap.set(target, proxy);
-    return proxy;
-  }
-  function isReactive2(value) {
-    if (isReadonly(value)) {
-      return isReactive2(value["__v_raw"]);
-    }
-    return !!(value && value["__v_isReactive"]);
-  }
-  function isReadonly(value) {
-    return !!(value && value["__v_isReadonly"]);
-  }
-  function isProxy(value) {
-    return isReactive2(value) || isReadonly(value);
-  }
-  function toRaw2(observed) {
-    return observed && toRaw2(observed["__v_raw"]) || observed;
-  }
-  function markRaw(value) {
-    shared.def(value, "__v_skip", true);
-    return value;
-  }
-  var convert = (val) => shared.isObject(val) ? reactive3(val) : val;
-  function isRef(r) {
-    return Boolean(r && r.__v_isRef === true);
-  }
-  function ref(value) {
-    return createRef(value);
-  }
-  function shallowRef(value) {
-    return createRef(value, true);
-  }
-  var RefImpl = class {
-    constructor(_rawValue, _shallow = false) {
-      this._rawValue = _rawValue;
-      this._shallow = _shallow;
-      this.__v_isRef = true;
-      this._value = _shallow ? _rawValue : convert(_rawValue);
-    }
-    get value() {
-      track(toRaw2(this), "get", "value");
-      return this._value;
-    }
-    set value(newVal) {
-      if (shared.hasChanged(toRaw2(newVal), this._rawValue)) {
-        this._rawValue = newVal;
-        this._value = this._shallow ? newVal : convert(newVal);
-        trigger(toRaw2(this), "set", "value", newVal);
-      }
-    }
-  };
-  function createRef(rawValue, shallow = false) {
-    if (isRef(rawValue)) {
-      return rawValue;
-    }
-    return new RefImpl(rawValue, shallow);
-  }
-  function triggerRef(ref2) {
-    trigger(toRaw2(ref2), "set", "value", ref2.value);
-  }
-  function unref(ref2) {
-    return isRef(ref2) ? ref2.value : ref2;
-  }
-  var shallowUnwrapHandlers = {
-    get: (target, key, receiver) => unref(Reflect.get(target, key, receiver)),
-    set: (target, key, value, receiver) => {
-      const oldValue = target[key];
-      if (isRef(oldValue) && !isRef(value)) {
-        oldValue.value = value;
-        return true;
-      } else {
-        return Reflect.set(target, key, value, receiver);
-      }
-    }
-  };
-  function proxyRefs(objectWithRefs) {
-    return isReactive2(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
-  }
-  var CustomRefImpl = class {
-    constructor(factory) {
-      this.__v_isRef = true;
-      const {get: get3, set: set3} = factory(() => track(this, "get", "value"), () => trigger(this, "set", "value"));
-      this._get = get3;
-      this._set = set3;
-    }
-    get value() {
-      return this._get();
-    }
-    set value(newVal) {
-      this._set(newVal);
-    }
-  };
-  function customRef(factory) {
-    return new CustomRefImpl(factory);
-  }
-  function toRefs(object) {
-    if (!isProxy(object)) {
-      console.warn(`toRefs() expects a reactive object but received a plain one.`);
-    }
-    const ret = shared.isArray(object) ? new Array(object.length) : {};
-    for (const key in object) {
-      ret[key] = toRef(object, key);
-    }
-    return ret;
-  }
-  var ObjectRefImpl = class {
-    constructor(_object, _key) {
-      this._object = _object;
-      this._key = _key;
-      this.__v_isRef = true;
-    }
-    get value() {
-      return this._object[this._key];
-    }
-    set value(newVal) {
-      this._object[this._key] = newVal;
-    }
-  };
-  function toRef(object, key) {
-    return isRef(object[key]) ? object[key] : new ObjectRefImpl(object, key);
-  }
-  var ComputedRefImpl = class {
-    constructor(getter, _setter, isReadonly2) {
-      this._setter = _setter;
-      this._dirty = true;
-      this.__v_isRef = true;
-      this.effect = effect3(getter, {
-        lazy: true,
-        scheduler: () => {
-          if (!this._dirty) {
-            this._dirty = true;
-            trigger(toRaw2(this), "set", "value");
-          }
-        }
-      });
-      this["__v_isReadonly"] = isReadonly2;
-    }
-    get value() {
-      const self2 = toRaw2(this);
-      if (self2._dirty) {
-        self2._value = this.effect();
-        self2._dirty = false;
-      }
-      track(self2, "get", "value");
-      return self2._value;
-    }
-    set value(newValue) {
-      this._setter(newValue);
-    }
-  };
-  function computed(getterOrOptions) {
-    let getter;
-    let setter;
-    if (shared.isFunction(getterOrOptions)) {
-      getter = getterOrOptions;
-      setter = () => {
-        console.warn("Write operation failed: computed value is readonly");
-      };
-    } else {
-      getter = getterOrOptions.get;
-      setter = getterOrOptions.set;
-    }
-    return new ComputedRefImpl(getter, setter, shared.isFunction(getterOrOptions) || !getterOrOptions.set);
-  }
-  exports.ITERATE_KEY = ITERATE_KEY;
-  exports.computed = computed;
-  exports.customRef = customRef;
-  exports.effect = effect3;
-  exports.enableTracking = enableTracking;
-  exports.isProxy = isProxy;
-  exports.isReactive = isReactive2;
-  exports.isReadonly = isReadonly;
-  exports.isRef = isRef;
-  exports.markRaw = markRaw;
-  exports.pauseTracking = pauseTracking;
-  exports.proxyRefs = proxyRefs;
-  exports.reactive = reactive3;
-  exports.readonly = readonly;
-  exports.ref = ref;
-  exports.resetTracking = resetTracking;
-  exports.shallowReactive = shallowReactive;
-  exports.shallowReadonly = shallowReadonly;
-  exports.shallowRef = shallowRef;
-  exports.stop = stop2;
-  exports.toRaw = toRaw2;
-  exports.toRef = toRef;
-  exports.toRefs = toRefs;
-  exports.track = track;
-  exports.trigger = trigger;
-  exports.triggerRef = triggerRef;
-  exports.unref = unref;
-});
-
-// node_modules/@vue/reactivity/index.js
-var require_reactivity = __commonJS((exports, module) => {
-  "use strict";
-  if (false) {} else {
-    module.exports = require_reactivity_cjs();
-  }
-});
-
 // packages/alpinejs/src/scheduler.js
 var flushPending = false;
 var flushing = false;
@@ -1277,10 +25,9 @@ function queueJob(job) {
   queueFlush();
 }
 function dequeueJob(job) {
-  const index = queue.indexOf(job);
-  if (index !== -1) {
+  let index = queue.indexOf(job);
+  if (index !== -1)
     queue.splice(index, 1);
-  }
 }
 function queueFlush() {
   if (!flushing && !flushPending) {
@@ -1325,7 +72,7 @@ function overrideEffect(override) {
   effect = override;
 }
 function elementBoundEffect(el) {
-  let cleanup = () => {
+  let cleanup2 = () => {
   };
   let wrappedEffect = (callback) => {
     let effectReference = effect(callback);
@@ -1336,15 +83,16 @@ function elementBoundEffect(el) {
       };
     }
     el._x_effects.add(effectReference);
-    cleanup = () => {
+    cleanup2 = () => {
       if (effectReference === void 0)
         return;
       el._x_effects.delete(effectReference);
       release(effectReference);
     };
+    return effectReference;
   };
   return [wrappedEffect, () => {
-    cleanup();
+    cleanup2();
   }];
 }
 
@@ -1355,8 +103,15 @@ var onElAddeds = [];
 function onElAdded(callback) {
   onElAddeds.push(callback);
 }
-function onElRemoved(callback) {
-  onElRemoveds.push(callback);
+function onElRemoved(el, callback) {
+  if (typeof callback === "function") {
+    if (!el._x_cleanups)
+      el._x_cleanups = [];
+    el._x_cleanups.push(callback);
+  } else {
+    callback = el;
+    onElRemoveds.push(callback);
+  }
 }
 function onAttributesAdded(callback) {
   onAttributeAddeds.push(callback);
@@ -1443,7 +198,7 @@ function onMutate(mutations) {
       let el = mutations[i].target;
       let name = mutations[i].attributeName;
       let oldValue = mutations[i].oldValue;
-      let add = () => {
+      let add2 = () => {
         if (!addedAttributes.has(el))
           addedAttributes.set(el, []);
         addedAttributes.get(el).push({name, value: el.getAttribute(name)});
@@ -1454,10 +209,10 @@ function onMutate(mutations) {
         removedAttributes.get(el).push(name);
       };
       if (el.hasAttribute(name) && oldValue === null) {
-        add();
+        add2();
       } else if (el.hasAttribute(name)) {
         remove();
-        add();
+        add2();
       } else {
         remove();
       }
@@ -1473,6 +228,10 @@ function onMutate(mutations) {
     if (addedNodes.includes(node))
       continue;
     onElRemoveds.forEach((i) => i(node));
+    if (node._x_cleanups) {
+      while (node._x_cleanups.length)
+        node._x_cleanups.pop()();
+    }
   }
   addedNodes.forEach((node) => {
     node._x_ignoreSelf = true;
@@ -1577,7 +336,7 @@ function mergeProxies(objects) {
 
 // packages/alpinejs/src/interceptor.js
 function initInterceptors(data2) {
-  let isObject = (val) => typeof val === "object" && !Array.isArray(val) && val !== null;
+  let isObject2 = (val) => typeof val === "object" && !Array.isArray(val) && val !== null;
   let recurse = (obj, basePath = "") => {
     Object.entries(Object.getOwnPropertyDescriptors(obj)).forEach(([key, {value, enumerable}]) => {
       if (enumerable === false || value === void 0)
@@ -1586,7 +345,7 @@ function initInterceptors(data2) {
       if (typeof value === "object" && value !== null && value._x_interceptor) {
         obj[key] = value.initialize(data2, path, key);
       } else {
-        if (isObject(value) && value !== obj && !(value instanceof Element)) {
+        if (isObject2(value) && value !== obj && !(value instanceof Element)) {
           recurse(value, path);
         }
       }
@@ -1647,7 +406,10 @@ function injectMagics(obj, el) {
   Object.entries(magics).forEach(([name, callback]) => {
     Object.defineProperty(obj, `$${name}`, {
       get() {
-        return callback(el, {Alpine: alpine_default, interceptor});
+        let [utilities, cleanup2] = getElementBoundUtilities(el);
+        utilities = {interceptor, ...utilities};
+        onElRemoved(el, cleanup2);
+        return callback(el, utilities);
       },
       enumerable: false
     });
@@ -1798,23 +560,27 @@ function deferHandlingDirectives(callback) {
   callback(flushHandlers);
   stopDeferring();
 }
-function getDirectiveHandler(el, directive2) {
-  let noop = () => {
-  };
-  let handler3 = directiveHandlers[directive2.type] || noop;
+function getElementBoundUtilities(el) {
   let cleanups = [];
-  let cleanup = (callback) => cleanups.push(callback);
+  let cleanup2 = (callback) => cleanups.push(callback);
   let [effect3, cleanupEffect] = elementBoundEffect(el);
   cleanups.push(cleanupEffect);
   let utilities = {
     Alpine: alpine_default,
     effect: effect3,
-    cleanup,
+    cleanup: cleanup2,
     evaluateLater: evaluateLater.bind(evaluateLater, el),
     evaluate: evaluate.bind(evaluate, el)
   };
   let doCleanup = () => cleanups.forEach((i) => i());
-  onAttributeRemoved(el, directive2.original, doCleanup);
+  return [utilities, doCleanup];
+}
+function getDirectiveHandler(el, directive2) {
+  let noop = () => {
+  };
+  let handler3 = directiveHandlers[directive2.type] || noop;
+  let [utilities, cleanup2] = getElementBoundUtilities(el);
+  onAttributeRemoved(el, directive2.original, cleanup2);
   let fullHandler = () => {
     if (el._x_ignore || el._x_ignoreSelf)
       return;
@@ -1822,7 +588,7 @@ function getDirectiveHandler(el, directive2) {
     handler3 = handler3.bind(handler3, el, directive2, utilities);
     isDeferringHandlers ? directiveHandlerStacks.get(currentHandlerStackKey).push(handler3) : handler3();
   };
-  fullHandler.runCleanups = doCleanup;
+  fullHandler.runCleanups = cleanup2;
   return fullHandler;
 }
 var startingWith = (subject, replacement) => ({name, value}) => {
@@ -2656,7 +1422,7 @@ var Alpine = {
   get raw() {
     return raw;
   },
-  version: "3.9.0",
+  version: "3.9.6",
   flushAndStopDeferringMutations,
   disableEffectScheduling,
   setReactivityEngine,
@@ -2696,8 +1462,684 @@ var Alpine = {
 };
 var alpine_default = Alpine;
 
-// packages/alpinejs/src/index.js
-var import_reactivity9 = __toModule(require_reactivity());
+// node_modules/@vue/shared/dist/shared.esm-bundler.js
+function makeMap(str, expectsLowerCase) {
+  const map = Object.create(null);
+  const list = str.split(",");
+  for (let i = 0; i < list.length; i++) {
+    map[list[i]] = true;
+  }
+  return expectsLowerCase ? (val) => !!map[val.toLowerCase()] : (val) => !!map[val];
+}
+var PatchFlagNames = {
+  [1]: `TEXT`,
+  [2]: `CLASS`,
+  [4]: `STYLE`,
+  [8]: `PROPS`,
+  [16]: `FULL_PROPS`,
+  [32]: `HYDRATE_EVENTS`,
+  [64]: `STABLE_FRAGMENT`,
+  [128]: `KEYED_FRAGMENT`,
+  [256]: `UNKEYED_FRAGMENT`,
+  [512]: `NEED_PATCH`,
+  [1024]: `DYNAMIC_SLOTS`,
+  [2048]: `DEV_ROOT_FRAGMENT`,
+  [-1]: `HOISTED`,
+  [-2]: `BAIL`
+};
+var slotFlagsText = {
+  [1]: "STABLE",
+  [2]: "DYNAMIC",
+  [3]: "FORWARDED"
+};
+var specialBooleanAttrs = `itemscope,allowfullscreen,formnovalidate,ismap,nomodule,novalidate,readonly`;
+var isBooleanAttr2 = /* @__PURE__ */ makeMap(specialBooleanAttrs + `,async,autofocus,autoplay,controls,default,defer,disabled,hidden,loop,open,required,reversed,scoped,seamless,checked,muted,multiple,selected`);
+var EMPTY_OBJ =  true ? Object.freeze({}) : 0;
+var EMPTY_ARR =  true ? Object.freeze([]) : 0;
+var extend = Object.assign;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var hasOwn = (val, key) => hasOwnProperty.call(val, key);
+var isArray = Array.isArray;
+var isMap = (val) => toTypeString(val) === "[object Map]";
+var isString = (val) => typeof val === "string";
+var isSymbol = (val) => typeof val === "symbol";
+var isObject = (val) => val !== null && typeof val === "object";
+var objectToString = Object.prototype.toString;
+var toTypeString = (value) => objectToString.call(value);
+var toRawType = (value) => {
+  return toTypeString(value).slice(8, -1);
+};
+var isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
+var cacheStringFunction = (fn) => {
+  const cache = Object.create(null);
+  return (str) => {
+    const hit = cache[str];
+    return hit || (cache[str] = fn(str));
+  };
+};
+var camelizeRE = /-(\w)/g;
+var camelize = cacheStringFunction((str) => {
+  return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : "");
+});
+var hyphenateRE = /\B([A-Z])/g;
+var hyphenate = cacheStringFunction((str) => str.replace(hyphenateRE, "-$1").toLowerCase());
+var capitalize = cacheStringFunction((str) => str.charAt(0).toUpperCase() + str.slice(1));
+var toHandlerKey = cacheStringFunction((str) => str ? `on${capitalize(str)}` : ``);
+var hasChanged = (value, oldValue) => value !== oldValue && (value === value || oldValue === oldValue);
+
+// node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
+var targetMap = new WeakMap();
+var effectStack = [];
+var activeEffect;
+var ITERATE_KEY = Symbol( true ? "iterate" : 0);
+var MAP_KEY_ITERATE_KEY = Symbol( true ? "Map key iterate" : 0);
+function isEffect(fn) {
+  return fn && fn._isEffect === true;
+}
+function effect2(fn, options = EMPTY_OBJ) {
+  if (isEffect(fn)) {
+    fn = fn.raw;
+  }
+  const effect3 = createReactiveEffect(fn, options);
+  if (!options.lazy) {
+    effect3();
+  }
+  return effect3;
+}
+function stop(effect3) {
+  if (effect3.active) {
+    cleanup(effect3);
+    if (effect3.options.onStop) {
+      effect3.options.onStop();
+    }
+    effect3.active = false;
+  }
+}
+var uid = 0;
+function createReactiveEffect(fn, options) {
+  const effect3 = function reactiveEffect() {
+    if (!effect3.active) {
+      return fn();
+    }
+    if (!effectStack.includes(effect3)) {
+      cleanup(effect3);
+      try {
+        enableTracking();
+        effectStack.push(effect3);
+        activeEffect = effect3;
+        return fn();
+      } finally {
+        effectStack.pop();
+        resetTracking();
+        activeEffect = effectStack[effectStack.length - 1];
+      }
+    }
+  };
+  effect3.id = uid++;
+  effect3.allowRecurse = !!options.allowRecurse;
+  effect3._isEffect = true;
+  effect3.active = true;
+  effect3.raw = fn;
+  effect3.deps = [];
+  effect3.options = options;
+  return effect3;
+}
+function cleanup(effect3) {
+  const {deps} = effect3;
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++) {
+      deps[i].delete(effect3);
+    }
+    deps.length = 0;
+  }
+}
+var shouldTrack = true;
+var trackStack = [];
+function pauseTracking() {
+  trackStack.push(shouldTrack);
+  shouldTrack = false;
+}
+function enableTracking() {
+  trackStack.push(shouldTrack);
+  shouldTrack = true;
+}
+function resetTracking() {
+  const last = trackStack.pop();
+  shouldTrack = last === void 0 ? true : last;
+}
+function track(target, type, key) {
+  if (!shouldTrack || activeEffect === void 0) {
+    return;
+  }
+  let depsMap = targetMap.get(target);
+  if (!depsMap) {
+    targetMap.set(target, depsMap = new Map());
+  }
+  let dep = depsMap.get(key);
+  if (!dep) {
+    depsMap.set(key, dep = new Set());
+  }
+  if (!dep.has(activeEffect)) {
+    dep.add(activeEffect);
+    activeEffect.deps.push(dep);
+    if (activeEffect.options.onTrack) {
+      activeEffect.options.onTrack({
+        effect: activeEffect,
+        target,
+        type,
+        key
+      });
+    }
+  }
+}
+function trigger(target, type, key, newValue, oldValue, oldTarget) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) {
+    return;
+  }
+  const effects = new Set();
+  const add2 = (effectsToAdd) => {
+    if (effectsToAdd) {
+      effectsToAdd.forEach((effect3) => {
+        if (effect3 !== activeEffect || effect3.allowRecurse) {
+          effects.add(effect3);
+        }
+      });
+    }
+  };
+  if (type === "clear") {
+    depsMap.forEach(add2);
+  } else if (key === "length" && isArray(target)) {
+    depsMap.forEach((dep, key2) => {
+      if (key2 === "length" || key2 >= newValue) {
+        add2(dep);
+      }
+    });
+  } else {
+    if (key !== void 0) {
+      add2(depsMap.get(key));
+    }
+    switch (type) {
+      case "add":
+        if (!isArray(target)) {
+          add2(depsMap.get(ITERATE_KEY));
+          if (isMap(target)) {
+            add2(depsMap.get(MAP_KEY_ITERATE_KEY));
+          }
+        } else if (isIntegerKey(key)) {
+          add2(depsMap.get("length"));
+        }
+        break;
+      case "delete":
+        if (!isArray(target)) {
+          add2(depsMap.get(ITERATE_KEY));
+          if (isMap(target)) {
+            add2(depsMap.get(MAP_KEY_ITERATE_KEY));
+          }
+        }
+        break;
+      case "set":
+        if (isMap(target)) {
+          add2(depsMap.get(ITERATE_KEY));
+        }
+        break;
+    }
+  }
+  const run = (effect3) => {
+    if (effect3.options.onTrigger) {
+      effect3.options.onTrigger({
+        effect: effect3,
+        target,
+        key,
+        type,
+        newValue,
+        oldValue,
+        oldTarget
+      });
+    }
+    if (effect3.options.scheduler) {
+      effect3.options.scheduler(effect3);
+    } else {
+      effect3();
+    }
+  };
+  effects.forEach(run);
+}
+var isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
+var builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key) => Symbol[key]).filter(isSymbol));
+var get2 = /* @__PURE__ */ createGetter();
+var shallowGet = /* @__PURE__ */ createGetter(false, true);
+var readonlyGet = /* @__PURE__ */ createGetter(true);
+var shallowReadonlyGet = /* @__PURE__ */ createGetter(true, true);
+var arrayInstrumentations = {};
+["includes", "indexOf", "lastIndexOf"].forEach((key) => {
+  const method = Array.prototype[key];
+  arrayInstrumentations[key] = function(...args) {
+    const arr = toRaw(this);
+    for (let i = 0, l = this.length; i < l; i++) {
+      track(arr, "get", i + "");
+    }
+    const res = method.apply(arr, args);
+    if (res === -1 || res === false) {
+      return method.apply(arr, args.map(toRaw));
+    } else {
+      return res;
+    }
+  };
+});
+["push", "pop", "shift", "unshift", "splice"].forEach((key) => {
+  const method = Array.prototype[key];
+  arrayInstrumentations[key] = function(...args) {
+    pauseTracking();
+    const res = method.apply(this, args);
+    resetTracking();
+    return res;
+  };
+});
+function createGetter(isReadonly = false, shallow = false) {
+  return function get3(target, key, receiver) {
+    if (key === "__v_isReactive") {
+      return !isReadonly;
+    } else if (key === "__v_isReadonly") {
+      return isReadonly;
+    } else if (key === "__v_raw" && receiver === (isReadonly ? shallow ? shallowReadonlyMap : readonlyMap : shallow ? shallowReactiveMap : reactiveMap).get(target)) {
+      return target;
+    }
+    const targetIsArray = isArray(target);
+    if (!isReadonly && targetIsArray && hasOwn(arrayInstrumentations, key)) {
+      return Reflect.get(arrayInstrumentations, key, receiver);
+    }
+    const res = Reflect.get(target, key, receiver);
+    if (isSymbol(key) ? builtInSymbols.has(key) : isNonTrackableKeys(key)) {
+      return res;
+    }
+    if (!isReadonly) {
+      track(target, "get", key);
+    }
+    if (shallow) {
+      return res;
+    }
+    if (isRef(res)) {
+      const shouldUnwrap = !targetIsArray || !isIntegerKey(key);
+      return shouldUnwrap ? res.value : res;
+    }
+    if (isObject(res)) {
+      return isReadonly ? readonly(res) : reactive2(res);
+    }
+    return res;
+  };
+}
+var set2 = /* @__PURE__ */ createSetter();
+var shallowSet = /* @__PURE__ */ createSetter(true);
+function createSetter(shallow = false) {
+  return function set3(target, key, value, receiver) {
+    let oldValue = target[key];
+    if (!shallow) {
+      value = toRaw(value);
+      oldValue = toRaw(oldValue);
+      if (!isArray(target) && isRef(oldValue) && !isRef(value)) {
+        oldValue.value = value;
+        return true;
+      }
+    }
+    const hadKey = isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key);
+    const result = Reflect.set(target, key, value, receiver);
+    if (target === toRaw(receiver)) {
+      if (!hadKey) {
+        trigger(target, "add", key, value);
+      } else if (hasChanged(value, oldValue)) {
+        trigger(target, "set", key, value, oldValue);
+      }
+    }
+    return result;
+  };
+}
+function deleteProperty(target, key) {
+  const hadKey = hasOwn(target, key);
+  const oldValue = target[key];
+  const result = Reflect.deleteProperty(target, key);
+  if (result && hadKey) {
+    trigger(target, "delete", key, void 0, oldValue);
+  }
+  return result;
+}
+function has(target, key) {
+  const result = Reflect.has(target, key);
+  if (!isSymbol(key) || !builtInSymbols.has(key)) {
+    track(target, "has", key);
+  }
+  return result;
+}
+function ownKeys(target) {
+  track(target, "iterate", isArray(target) ? "length" : ITERATE_KEY);
+  return Reflect.ownKeys(target);
+}
+var mutableHandlers = {
+  get: get2,
+  set: set2,
+  deleteProperty,
+  has,
+  ownKeys
+};
+var readonlyHandlers = {
+  get: readonlyGet,
+  set(target, key) {
+    if (true) {
+      console.warn(`Set operation on key "${String(key)}" failed: target is readonly.`, target);
+    }
+    return true;
+  },
+  deleteProperty(target, key) {
+    if (true) {
+      console.warn(`Delete operation on key "${String(key)}" failed: target is readonly.`, target);
+    }
+    return true;
+  }
+};
+var shallowReactiveHandlers = extend({}, mutableHandlers, {
+  get: shallowGet,
+  set: shallowSet
+});
+var shallowReadonlyHandlers = extend({}, readonlyHandlers, {
+  get: shallowReadonlyGet
+});
+var toReactive = (value) => isObject(value) ? reactive2(value) : value;
+var toReadonly = (value) => isObject(value) ? readonly(value) : value;
+var toShallow = (value) => value;
+var getProto = (v) => Reflect.getPrototypeOf(v);
+function get$1(target, key, isReadonly = false, isShallow = false) {
+  target = target["__v_raw"];
+  const rawTarget = toRaw(target);
+  const rawKey = toRaw(key);
+  if (key !== rawKey) {
+    !isReadonly && track(rawTarget, "get", key);
+  }
+  !isReadonly && track(rawTarget, "get", rawKey);
+  const {has: has2} = getProto(rawTarget);
+  const wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
+  if (has2.call(rawTarget, key)) {
+    return wrap(target.get(key));
+  } else if (has2.call(rawTarget, rawKey)) {
+    return wrap(target.get(rawKey));
+  } else if (target !== rawTarget) {
+    target.get(key);
+  }
+}
+function has$1(key, isReadonly = false) {
+  const target = this["__v_raw"];
+  const rawTarget = toRaw(target);
+  const rawKey = toRaw(key);
+  if (key !== rawKey) {
+    !isReadonly && track(rawTarget, "has", key);
+  }
+  !isReadonly && track(rawTarget, "has", rawKey);
+  return key === rawKey ? target.has(key) : target.has(key) || target.has(rawKey);
+}
+function size(target, isReadonly = false) {
+  target = target["__v_raw"];
+  !isReadonly && track(toRaw(target), "iterate", ITERATE_KEY);
+  return Reflect.get(target, "size", target);
+}
+function add(value) {
+  value = toRaw(value);
+  const target = toRaw(this);
+  const proto = getProto(target);
+  const hadKey = proto.has.call(target, value);
+  if (!hadKey) {
+    target.add(value);
+    trigger(target, "add", value, value);
+  }
+  return this;
+}
+function set$1(key, value) {
+  value = toRaw(value);
+  const target = toRaw(this);
+  const {has: has2, get: get3} = getProto(target);
+  let hadKey = has2.call(target, key);
+  if (!hadKey) {
+    key = toRaw(key);
+    hadKey = has2.call(target, key);
+  } else if (true) {
+    checkIdentityKeys(target, has2, key);
+  }
+  const oldValue = get3.call(target, key);
+  target.set(key, value);
+  if (!hadKey) {
+    trigger(target, "add", key, value);
+  } else if (hasChanged(value, oldValue)) {
+    trigger(target, "set", key, value, oldValue);
+  }
+  return this;
+}
+function deleteEntry(key) {
+  const target = toRaw(this);
+  const {has: has2, get: get3} = getProto(target);
+  let hadKey = has2.call(target, key);
+  if (!hadKey) {
+    key = toRaw(key);
+    hadKey = has2.call(target, key);
+  } else if (true) {
+    checkIdentityKeys(target, has2, key);
+  }
+  const oldValue = get3 ? get3.call(target, key) : void 0;
+  const result = target.delete(key);
+  if (hadKey) {
+    trigger(target, "delete", key, void 0, oldValue);
+  }
+  return result;
+}
+function clear() {
+  const target = toRaw(this);
+  const hadItems = target.size !== 0;
+  const oldTarget =  true ? isMap(target) ? new Map(target) : new Set(target) : 0;
+  const result = target.clear();
+  if (hadItems) {
+    trigger(target, "clear", void 0, void 0, oldTarget);
+  }
+  return result;
+}
+function createForEach(isReadonly, isShallow) {
+  return function forEach(callback, thisArg) {
+    const observed = this;
+    const target = observed["__v_raw"];
+    const rawTarget = toRaw(target);
+    const wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
+    !isReadonly && track(rawTarget, "iterate", ITERATE_KEY);
+    return target.forEach((value, key) => {
+      return callback.call(thisArg, wrap(value), wrap(key), observed);
+    });
+  };
+}
+function createIterableMethod(method, isReadonly, isShallow) {
+  return function(...args) {
+    const target = this["__v_raw"];
+    const rawTarget = toRaw(target);
+    const targetIsMap = isMap(rawTarget);
+    const isPair = method === "entries" || method === Symbol.iterator && targetIsMap;
+    const isKeyOnly = method === "keys" && targetIsMap;
+    const innerIterator = target[method](...args);
+    const wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
+    !isReadonly && track(rawTarget, "iterate", isKeyOnly ? MAP_KEY_ITERATE_KEY : ITERATE_KEY);
+    return {
+      next() {
+        const {value, done} = innerIterator.next();
+        return done ? {value, done} : {
+          value: isPair ? [wrap(value[0]), wrap(value[1])] : wrap(value),
+          done
+        };
+      },
+      [Symbol.iterator]() {
+        return this;
+      }
+    };
+  };
+}
+function createReadonlyMethod(type) {
+  return function(...args) {
+    if (true) {
+      const key = args[0] ? `on key "${args[0]}" ` : ``;
+      console.warn(`${capitalize(type)} operation ${key}failed: target is readonly.`, toRaw(this));
+    }
+    return type === "delete" ? false : this;
+  };
+}
+var mutableInstrumentations = {
+  get(key) {
+    return get$1(this, key);
+  },
+  get size() {
+    return size(this);
+  },
+  has: has$1,
+  add,
+  set: set$1,
+  delete: deleteEntry,
+  clear,
+  forEach: createForEach(false, false)
+};
+var shallowInstrumentations = {
+  get(key) {
+    return get$1(this, key, false, true);
+  },
+  get size() {
+    return size(this);
+  },
+  has: has$1,
+  add,
+  set: set$1,
+  delete: deleteEntry,
+  clear,
+  forEach: createForEach(false, true)
+};
+var readonlyInstrumentations = {
+  get(key) {
+    return get$1(this, key, true);
+  },
+  get size() {
+    return size(this, true);
+  },
+  has(key) {
+    return has$1.call(this, key, true);
+  },
+  add: createReadonlyMethod("add"),
+  set: createReadonlyMethod("set"),
+  delete: createReadonlyMethod("delete"),
+  clear: createReadonlyMethod("clear"),
+  forEach: createForEach(true, false)
+};
+var shallowReadonlyInstrumentations = {
+  get(key) {
+    return get$1(this, key, true, true);
+  },
+  get size() {
+    return size(this, true);
+  },
+  has(key) {
+    return has$1.call(this, key, true);
+  },
+  add: createReadonlyMethod("add"),
+  set: createReadonlyMethod("set"),
+  delete: createReadonlyMethod("delete"),
+  clear: createReadonlyMethod("clear"),
+  forEach: createForEach(true, true)
+};
+var iteratorMethods = ["keys", "values", "entries", Symbol.iterator];
+iteratorMethods.forEach((method) => {
+  mutableInstrumentations[method] = createIterableMethod(method, false, false);
+  readonlyInstrumentations[method] = createIterableMethod(method, true, false);
+  shallowInstrumentations[method] = createIterableMethod(method, false, true);
+  shallowReadonlyInstrumentations[method] = createIterableMethod(method, true, true);
+});
+function createInstrumentationGetter(isReadonly, shallow) {
+  const instrumentations = shallow ? isReadonly ? shallowReadonlyInstrumentations : shallowInstrumentations : isReadonly ? readonlyInstrumentations : mutableInstrumentations;
+  return (target, key, receiver) => {
+    if (key === "__v_isReactive") {
+      return !isReadonly;
+    } else if (key === "__v_isReadonly") {
+      return isReadonly;
+    } else if (key === "__v_raw") {
+      return target;
+    }
+    return Reflect.get(hasOwn(instrumentations, key) && key in target ? instrumentations : target, key, receiver);
+  };
+}
+var mutableCollectionHandlers = {
+  get: createInstrumentationGetter(false, false)
+};
+var shallowCollectionHandlers = {
+  get: createInstrumentationGetter(false, true)
+};
+var readonlyCollectionHandlers = {
+  get: createInstrumentationGetter(true, false)
+};
+var shallowReadonlyCollectionHandlers = {
+  get: createInstrumentationGetter(true, true)
+};
+function checkIdentityKeys(target, has2, key) {
+  const rawKey = toRaw(key);
+  if (rawKey !== key && has2.call(target, rawKey)) {
+    const type = toRawType(target);
+    console.warn(`Reactive ${type} contains both the raw and reactive versions of the same object${type === `Map` ? ` as keys` : ``}, which can lead to inconsistencies. Avoid differentiating between the raw and reactive versions of an object and only use the reactive version if possible.`);
+  }
+}
+var reactiveMap = new WeakMap();
+var shallowReactiveMap = new WeakMap();
+var readonlyMap = new WeakMap();
+var shallowReadonlyMap = new WeakMap();
+function targetTypeMap(rawType) {
+  switch (rawType) {
+    case "Object":
+    case "Array":
+      return 1;
+    case "Map":
+    case "Set":
+    case "WeakMap":
+    case "WeakSet":
+      return 2;
+    default:
+      return 0;
+  }
+}
+function getTargetType(value) {
+  return value["__v_skip"] || !Object.isExtensible(value) ? 0 : targetTypeMap(toRawType(value));
+}
+function reactive2(target) {
+  if (target && target["__v_isReadonly"]) {
+    return target;
+  }
+  return createReactiveObject(target, false, mutableHandlers, mutableCollectionHandlers, reactiveMap);
+}
+function readonly(target) {
+  return createReactiveObject(target, true, readonlyHandlers, readonlyCollectionHandlers, readonlyMap);
+}
+function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers, proxyMap) {
+  if (!isObject(target)) {
+    if (true) {
+      console.warn(`value cannot be made reactive: ${String(target)}`);
+    }
+    return target;
+  }
+  if (target["__v_raw"] && !(isReadonly && target["__v_isReactive"])) {
+    return target;
+  }
+  const existingProxy = proxyMap.get(target);
+  if (existingProxy) {
+    return existingProxy;
+  }
+  const targetType = getTargetType(target);
+  if (targetType === 0) {
+    return target;
+  }
+  const proxy = new Proxy(target, targetType === 2 ? collectionHandlers : baseHandlers);
+  proxyMap.set(target, proxy);
+  return proxy;
+}
+function toRaw(observed) {
+  return observed && toRaw(observed["__v_raw"]) || observed;
+}
+function isRef(r) {
+  return Boolean(r && r.__v_isRef === true);
+}
 
 // packages/alpinejs/src/magics/$nextTick.js
 magic("nextTick", () => nextTick);
@@ -2706,11 +2148,11 @@ magic("nextTick", () => nextTick);
 magic("dispatch", (el) => dispatch.bind(dispatch, el));
 
 // packages/alpinejs/src/magics/$watch.js
-magic("watch", (el) => (key, callback) => {
-  let evaluate2 = evaluateLater(el, key);
+magic("watch", (el, {evaluateLater: evaluateLater2, effect: effect3}) => (key, callback) => {
+  let evaluate2 = evaluateLater2(key);
   let firstTime = true;
   let oldValue;
-  effect(() => evaluate2((value) => {
+  let effectReference = effect3(() => evaluate2((value) => {
     JSON.stringify(value);
     if (!firstTime) {
       queueMicrotask(() => {
@@ -2722,6 +2164,7 @@ magic("watch", (el) => (key, callback) => {
     }
     firstTime = false;
   }));
+  el._x_effects.delete(effectReference);
 });
 
 // packages/alpinejs/src/magics/$store.js
@@ -2781,8 +2224,15 @@ magic("id", (el) => (name, key = null) => {
 // packages/alpinejs/src/magics/$el.js
 magic("el", (el) => el);
 
+// packages/alpinejs/src/magics/index.js
+warnMissingPluginMagic("Focus", "focus", "focus");
+warnMissingPluginMagic("Persist", "persist", "persist");
+function warnMissingPluginMagic(name, magicName, slug) {
+  magic(magicName, (el) => warn(`You can't use [$${directiveName}] without first installing the "${name}" plugin here: https://alpine.dev/plugins/${slug}`, el));
+}
+
 // packages/alpinejs/src/directives/x-modelable.js
-directive("modelable", (el, {expression}, {effect: effect3, evaluate: evaluate2, evaluateLater: evaluateLater2}) => {
+directive("modelable", (el, {expression}, {effect: effect3, evaluateLater: evaluateLater2}) => {
   let func = evaluateLater2(expression);
   let innerGet = () => {
     let result;
@@ -2793,12 +2243,11 @@ directive("modelable", (el, {expression}, {effect: effect3, evaluate: evaluate2,
   let innerSet = (val) => evaluateInnerSet(() => {
   }, {scope: {__placeholder: val}});
   let initialValue = innerGet();
-  if (el._x_modelable_hook)
-    initialValue = el._x_modelable_hook(initialValue);
   innerSet(initialValue);
   queueMicrotask(() => {
     if (!el._x_model)
       return;
+    el._x_removeModelListeners["default"]();
     let outerGet = el._x_model.get;
     let outerSet = el._x_model.set;
     effect3(() => innerSet(outerGet()));
@@ -2807,7 +2256,7 @@ directive("modelable", (el, {expression}, {effect: effect3, evaluate: evaluate2,
 });
 
 // packages/alpinejs/src/directives/x-teleport.js
-directive("teleport", (el, {expression}, {cleanup}) => {
+directive("teleport", (el, {expression}, {cleanup: cleanup2}) => {
   if (el.tagName.toLowerCase() !== "template")
     warn("x-teleport can only be used on a <template> tag", el);
   let target = document.querySelector(expression);
@@ -2830,15 +2279,15 @@ directive("teleport", (el, {expression}, {cleanup}) => {
     initTree(clone2);
     clone2._x_ignore = true;
   });
-  cleanup(() => clone2.remove());
+  cleanup2(() => clone2.remove());
 });
 
 // packages/alpinejs/src/directives/x-ignore.js
 var handler = () => {
 };
-handler.inline = (el, {modifiers}, {cleanup}) => {
+handler.inline = (el, {modifiers}, {cleanup: cleanup2}) => {
   modifiers.includes("self") ? el._x_ignoreSelf = true : el._x_ignore = true;
-  cleanup(() => {
+  cleanup2(() => {
     modifiers.includes("self") ? delete el._x_ignoreSelf : delete el._x_ignore;
   });
 };
@@ -2884,11 +2333,19 @@ function on(el, event, modifiers, callback) {
     handler3 = wrapHandler(handler3, (next, e) => {
       if (el.contains(e.target))
         return;
+      if (e.target.isConnected === false)
+        return;
       if (el.offsetWidth < 1 && el.offsetHeight < 1)
         return;
       if (el._x_isShown === false)
         return;
       next(e);
+    });
+  }
+  if (modifiers.includes("once")) {
+    handler3 = wrapHandler(handler3, (next, e) => {
+      next(e);
+      listenerTarget.removeEventListener(event, handler3, options);
     });
   }
   handler3 = wrapHandler(handler3, (next, e) => {
@@ -2908,12 +2365,6 @@ function on(el, event, modifiers, callback) {
     let nextModifier = modifiers[modifiers.indexOf("throttle") + 1] || "invalid-wait";
     let wait = isNumeric(nextModifier.split("ms")[0]) ? Number(nextModifier.split("ms")[0]) : 250;
     handler3 = throttle(handler3, wait);
-  }
-  if (modifiers.includes("once")) {
-    handler3 = wrapHandler(handler3, (next, e) => {
-      next(e);
-      listenerTarget.removeEventListener(event, handler3, options);
-    });
   }
   listenerTarget.addEventListener(event, handler3, options);
   return () => {
@@ -2989,7 +2440,7 @@ function keyToModifiers(key) {
 }
 
 // packages/alpinejs/src/directives/x-model.js
-directive("model", (el, {modifiers, expression}, {effect: effect3, cleanup}) => {
+directive("model", (el, {modifiers, expression}, {effect: effect3, cleanup: cleanup2}) => {
   let evaluate2 = evaluateLater(el, expression);
   let assignmentExpression = `${expression} = rightSideOfExpression($event, ${expression})`;
   let evaluateAssignment = evaluateLater(el, assignmentExpression);
@@ -3002,7 +2453,10 @@ directive("model", (el, {modifiers, expression}, {effect: effect3, cleanup}) => 
       rightSideOfExpression: assigmentFunction
     }});
   });
-  cleanup(() => removeListener());
+  if (!el._x_removeModelListeners)
+    el._x_removeModelListeners = {};
+  el._x_removeModelListeners["default"] = removeListener;
+  cleanup2(() => el._x_removeModelListeners["default"]());
   let evaluateSetModel = evaluateLater(el, `${expression} = __placeholder`);
   el._x_model = {
     get() {
@@ -3078,11 +2532,11 @@ directive("cloak", (el) => queueMicrotask(() => mutateDom(() => el.removeAttribu
 
 // packages/alpinejs/src/directives/x-init.js
 addInitSelector(() => `[${prefix("init")}]`);
-directive("init", skipDuringClone((el, {expression}) => {
+directive("init", skipDuringClone((el, {expression}, {evaluate: evaluate2}) => {
   if (typeof expression === "string") {
-    return !!expression.trim() && evaluate(el, expression, {}, false);
+    return !!expression.trim() && evaluate2(expression, {}, false);
   }
-  return evaluate(el, expression, {}, false);
+  return evaluate2(expression, {}, false);
 }));
 
 // packages/alpinejs/src/directives/x-text.js
@@ -3102,7 +2556,12 @@ directive("html", (el, {expression}, {effect: effect3, evaluateLater: evaluateLa
   let evaluate2 = evaluateLater2(expression);
   effect3(() => {
     evaluate2((value) => {
-      el.innerHTML = value;
+      mutateDom(() => {
+        el.innerHTML = value;
+        el._x_ignoreSelf = true;
+        initTree(el);
+        delete el._x_ignoreSelf;
+      });
     });
   });
 });
@@ -3153,7 +2612,7 @@ function storeKeyForXFor(el, expression) {
 
 // packages/alpinejs/src/directives/x-data.js
 addRootSelector(() => `[${prefix("data")}]`);
-directive("data", skipDuringClone((el, {expression}, {cleanup}) => {
+directive("data", skipDuringClone((el, {expression}, {cleanup: cleanup2}) => {
   expression = expression === "" ? "{}" : expression;
   let magicContext = {};
   injectMagics(magicContext, el);
@@ -3167,27 +2626,37 @@ directive("data", skipDuringClone((el, {expression}, {cleanup}) => {
   initInterceptors(reactiveData);
   let undo = addScopeToNode(el, reactiveData);
   reactiveData["init"] && evaluate(el, reactiveData["init"]);
-  cleanup(() => {
-    undo();
+  cleanup2(() => {
     reactiveData["destroy"] && evaluate(el, reactiveData["destroy"]);
+    undo();
   });
 }));
 
 // packages/alpinejs/src/directives/x-show.js
 directive("show", (el, {modifiers, expression}, {effect: effect3}) => {
   let evaluate2 = evaluateLater(el, expression);
-  let hide = () => mutateDom(() => {
-    el.style.display = "none";
+  if (!el._x_doHide)
+    el._x_doHide = () => {
+      mutateDom(() => el.style.display = "none");
+    };
+  if (!el._x_doShow)
+    el._x_doShow = () => {
+      mutateDom(() => {
+        if (el.style.length === 1 && el.style.display === "none") {
+          el.removeAttribute("style");
+        } else {
+          el.style.removeProperty("display");
+        }
+      });
+    };
+  let hide = () => {
+    el._x_doHide();
     el._x_isShown = false;
-  });
-  let show = () => mutateDom(() => {
-    if (el.style.length === 1 && el.style.display === "none") {
-      el.removeAttribute("style");
-    } else {
-      el.style.removeProperty("display");
-    }
+  };
+  let show = () => {
+    el._x_doShow();
     el._x_isShown = true;
-  });
+  };
   let clickAwayCompatibleShow = () => setTimeout(show);
   let toggle = once((value) => value ? show() : hide(), (value) => {
     if (typeof el._x_toggleAndCascadeWithTransitions === "function") {
@@ -3210,21 +2679,21 @@ directive("show", (el, {modifiers, expression}, {effect: effect3}) => {
 });
 
 // packages/alpinejs/src/directives/x-for.js
-directive("for", (el, {expression}, {effect: effect3, cleanup}) => {
+directive("for", (el, {expression}, {effect: effect3, cleanup: cleanup2}) => {
   let iteratorNames = parseForExpression(expression);
   let evaluateItems = evaluateLater(el, iteratorNames.items);
   let evaluateKey = evaluateLater(el, el._x_keyExpression || "index");
   el._x_prevKeys = [];
   el._x_lookup = {};
   effect3(() => loop(el, iteratorNames, evaluateItems, evaluateKey));
-  cleanup(() => {
+  cleanup2(() => {
     Object.values(el._x_lookup).forEach((el2) => el2.remove());
     delete el._x_prevKeys;
     delete el._x_lookup;
   });
 });
 function loop(el, iteratorNames, evaluateItems, evaluateKey) {
-  let isObject = (i) => typeof i === "object" && !Array.isArray(i);
+  let isObject2 = (i) => typeof i === "object" && !Array.isArray(i);
   let templateEl = el;
   evaluateItems((items) => {
     if (isNumeric3(items) && items >= 0) {
@@ -3236,7 +2705,7 @@ function loop(el, iteratorNames, evaluateItems, evaluateKey) {
     let prevKeys = el._x_prevKeys;
     let scopes = [];
     let keys = [];
-    if (isObject(items)) {
+    if (isObject2(items)) {
       items = Object.entries(items).map(([key, value]) => {
         let scope2 = getIterationScopeVariables(iteratorNames, value, key, items);
         evaluateKey((value2) => keys.push(value2), {scope: {index: key, ...scope2}});
@@ -3375,17 +2844,17 @@ function isNumeric3(subject) {
 // packages/alpinejs/src/directives/x-ref.js
 function handler2() {
 }
-handler2.inline = (el, {expression}, {cleanup}) => {
+handler2.inline = (el, {expression}, {cleanup: cleanup2}) => {
   let root = closestRoot(el);
   if (!root._x_refs)
     root._x_refs = {};
   root._x_refs[expression] = el;
-  cleanup(() => delete root._x_refs[expression]);
+  cleanup2(() => delete root._x_refs[expression]);
 };
 directive("ref", handler2);
 
 // packages/alpinejs/src/directives/x-if.js
-directive("if", (el, {expression}, {effect: effect3, cleanup}) => {
+directive("if", (el, {expression}, {effect: effect3, cleanup: cleanup2}) => {
   let evaluate2 = evaluateLater(el, expression);
   let show = () => {
     if (el._x_currentIfEl)
@@ -3417,7 +2886,7 @@ directive("if", (el, {expression}, {effect: effect3, cleanup}) => {
   effect3(() => evaluate2((value) => {
     value ? show() : hide();
   }));
-  cleanup(() => el._x_undoIf && el._x_undoIf());
+  cleanup2(() => el._x_undoIf && el._x_undoIf());
 });
 
 // packages/alpinejs/src/directives/x-id.js
@@ -3428,7 +2897,7 @@ directive("id", (el, {expression}, {evaluate: evaluate2}) => {
 
 // packages/alpinejs/src/directives/x-on.js
 mapAttributes(startingWith("@", into(prefix("on:"))));
-directive("on", skipDuringClone((el, {value, modifiers, expression}, {cleanup}) => {
+directive("on", skipDuringClone((el, {value, modifiers, expression}, {cleanup: cleanup2}) => {
   let evaluate2 = expression ? evaluateLater(el, expression) : () => {
   };
   if (el.tagName.toLowerCase() === "template") {
@@ -3441,12 +2910,20 @@ directive("on", skipDuringClone((el, {value, modifiers, expression}, {cleanup}) 
     evaluate2(() => {
     }, {scope: {$event: e}, params: [e]});
   });
-  cleanup(() => removeListener());
+  cleanup2(() => removeListener());
 }));
+
+// packages/alpinejs/src/directives/index.js
+warnMissingPluginDirective("Collapse", "collapse", "collapse");
+warnMissingPluginDirective("Intersect", "intersect", "intersect");
+warnMissingPluginDirective("Focus", "trap", "focus");
+function warnMissingPluginDirective(name, directiveName2, slug) {
+  directive(directiveName2, (el) => warn(`You can't use [x-${directiveName2}] without first installing the "${name}" plugin here: https://alpine.dev/plugins/${slug}`, el));
+}
 
 // packages/alpinejs/src/index.js
 alpine_default.setEvaluator(normalEvaluator);
-alpine_default.setReactivityEngine({reactive: import_reactivity9.reactive, effect: import_reactivity9.effect, release: import_reactivity9.stop, raw: import_reactivity9.toRaw});
+alpine_default.setReactivityEngine({reactive: reactive2, effect: effect2, release: stop, raw: toRaw});
 var src_default = alpine_default;
 
 // packages/alpinejs/builds/module.js
@@ -3483,24 +2960,12 @@ var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "./node_mod
 var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
 var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
 var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
-var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
-var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
     var requestHeaders = config.headers;
     var responseType = config.responseType;
-    var onCanceled;
-    function done() {
-      if (config.cancelToken) {
-        config.cancelToken.unsubscribe(onCanceled);
-      }
-
-      if (config.signal) {
-        config.signal.removeEventListener('abort', onCanceled);
-      }
-    }
 
     if (utils.isFormData(requestData)) {
       delete requestHeaders['Content-Type']; // Let the browser set it
@@ -3538,13 +3003,7 @@ module.exports = function xhrAdapter(config) {
         request: request
       };
 
-      settle(function _resolve(value) {
-        resolve(value);
-        done();
-      }, function _reject(err) {
-        reject(err);
-        done();
-      }, response);
+      settle(resolve, reject, response);
 
       // Clean up request
       request = null;
@@ -3597,15 +3056,14 @@ module.exports = function xhrAdapter(config) {
 
     // Handle timeout
     request.ontimeout = function handleTimeout() {
-      var timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
-      var transitional = config.transitional || defaults.transitional;
+      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
       reject(createError(
         timeoutErrorMessage,
         config,
-        transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
+        config.transitional && config.transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
         request));
 
       // Clean up request
@@ -3659,22 +3117,18 @@ module.exports = function xhrAdapter(config) {
       request.upload.addEventListener('progress', config.onUploadProgress);
     }
 
-    if (config.cancelToken || config.signal) {
+    if (config.cancelToken) {
       // Handle cancellation
-      // eslint-disable-next-line func-names
-      onCanceled = function(cancel) {
+      config.cancelToken.promise.then(function onCanceled(cancel) {
         if (!request) {
           return;
         }
-        reject(!cancel || (cancel && cancel.type) ? new Cancel('canceled') : cancel);
-        request.abort();
-        request = null;
-      };
 
-      config.cancelToken && config.cancelToken.subscribe(onCanceled);
-      if (config.signal) {
-        config.signal.aborted ? onCanceled() : config.signal.addEventListener('abort', onCanceled);
-      }
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
     }
 
     if (!requestData) {
@@ -3720,11 +3174,6 @@ function createInstance(defaultConfig) {
   // Copy context to instance
   utils.extend(instance, context);
 
-  // Factory for creating new instances
-  instance.create = function create(instanceConfig) {
-    return createInstance(mergeConfig(defaultConfig, instanceConfig));
-  };
-
   return instance;
 }
 
@@ -3734,11 +3183,15 @@ var axios = createInstance(defaults);
 // Expose Axios class to allow class inheritance
 axios.Axios = Axios;
 
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
+};
+
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "./node_modules/axios/lib/cancel/CancelToken.js");
 axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
-axios.VERSION = (__webpack_require__(/*! ./env/data */ "./node_modules/axios/lib/env/data.js").version);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -3810,42 +3263,11 @@ function CancelToken(executor) {
   }
 
   var resolvePromise;
-
   this.promise = new Promise(function promiseExecutor(resolve) {
     resolvePromise = resolve;
   });
 
   var token = this;
-
-  // eslint-disable-next-line func-names
-  this.promise.then(function(cancel) {
-    if (!token._listeners) return;
-
-    var i;
-    var l = token._listeners.length;
-
-    for (i = 0; i < l; i++) {
-      token._listeners[i](cancel);
-    }
-    token._listeners = null;
-  });
-
-  // eslint-disable-next-line func-names
-  this.promise.then = function(onfulfilled) {
-    var _resolve;
-    // eslint-disable-next-line func-names
-    var promise = new Promise(function(resolve) {
-      token.subscribe(resolve);
-      _resolve = resolve;
-    }).then(onfulfilled);
-
-    promise.cancel = function reject() {
-      token.unsubscribe(_resolve);
-    };
-
-    return promise;
-  };
-
   executor(function cancel(message) {
     if (token.reason) {
       // Cancellation has already been requested
@@ -3863,37 +3285,6 @@ function CancelToken(executor) {
 CancelToken.prototype.throwIfRequested = function throwIfRequested() {
   if (this.reason) {
     throw this.reason;
-  }
-};
-
-/**
- * Subscribe to the cancel signal
- */
-
-CancelToken.prototype.subscribe = function subscribe(listener) {
-  if (this.reason) {
-    listener(this.reason);
-    return;
-  }
-
-  if (this._listeners) {
-    this._listeners.push(listener);
-  } else {
-    this._listeners = [listener];
-  }
-};
-
-/**
- * Unsubscribe from the cancel signal
- */
-
-CancelToken.prototype.unsubscribe = function unsubscribe(listener) {
-  if (!this._listeners) {
-    return;
-  }
-  var index = this._listeners.indexOf(listener);
-  if (index !== -1) {
-    this._listeners.splice(index, 1);
   }
 };
 
@@ -3968,18 +3359,14 @@ function Axios(instanceConfig) {
  *
  * @param {Object} config The config specific for this request (merged with this.defaults)
  */
-Axios.prototype.request = function request(configOrUrl, config) {
+Axios.prototype.request = function request(config) {
   /*eslint no-param-reassign:0*/
   // Allow for axios('example/url'[, config]) a la fetch API
-  if (typeof configOrUrl === 'string') {
-    config = config || {};
-    config.url = configOrUrl;
+  if (typeof config === 'string') {
+    config = arguments[1] || {};
+    config.url = arguments[0];
   } else {
-    config = configOrUrl || {};
-  }
-
-  if (!config.url) {
-    throw new Error('Provided config url is not valid');
+    config = config || {};
   }
 
   config = mergeConfig(this.defaults, config);
@@ -3997,9 +3384,9 @@ Axios.prototype.request = function request(configOrUrl, config) {
 
   if (transitional !== undefined) {
     validator.assertOptions(transitional, {
-      silentJSONParsing: validators.transitional(validators.boolean),
-      forcedJSONParsing: validators.transitional(validators.boolean),
-      clarifyTimeoutError: validators.transitional(validators.boolean)
+      silentJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      forcedJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      clarifyTimeoutError: validators.transitional(validators.boolean, '1.0.0')
     }, false);
   }
 
@@ -4064,9 +3451,6 @@ Axios.prototype.request = function request(configOrUrl, config) {
 };
 
 Axios.prototype.getUri = function getUri(config) {
-  if (!config.url) {
-    throw new Error('Provided config url is not valid');
-  }
   config = mergeConfig(this.defaults, config);
   return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
 };
@@ -4237,7 +3621,6 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
 var transformData = __webpack_require__(/*! ./transformData */ "./node_modules/axios/lib/core/transformData.js");
 var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
 var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
-var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -4245,10 +3628,6 @@ var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "./node_modules/axios/l
 function throwIfCancellationRequested(config) {
   if (config.cancelToken) {
     config.cancelToken.throwIfRequested();
-  }
-
-  if (config.signal && config.signal.aborted) {
-    throw new Cancel('canceled');
   }
 }
 
@@ -4366,8 +3745,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
       stack: this.stack,
       // Axios
       config: this.config,
-      code: this.code,
-      status: this.response && this.response.status ? this.response.status : null
+      code: this.code
     };
   };
   return error;
@@ -4400,6 +3778,17 @@ module.exports = function mergeConfig(config1, config2) {
   config2 = config2 || {};
   var config = {};
 
+  var valueFromConfig2Keys = ['url', 'method', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
+    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
+  ];
+  var directMergeKeys = ['validateStatus'];
+
   function getMergedValue(target, source) {
     if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
       return utils.merge(target, source);
@@ -4411,74 +3800,51 @@ module.exports = function mergeConfig(config1, config2) {
     return source;
   }
 
-  // eslint-disable-next-line consistent-return
   function mergeDeepProperties(prop) {
     if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(config1[prop], config2[prop]);
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
     } else if (!utils.isUndefined(config1[prop])) {
-      return getMergedValue(undefined, config1[prop]);
+      config[prop] = getMergedValue(undefined, config1[prop]);
     }
   }
 
-  // eslint-disable-next-line consistent-return
-  function valueFromConfig2(prop) {
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
     if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(undefined, config2[prop]);
+      config[prop] = getMergedValue(undefined, config2[prop]);
     }
-  }
-
-  // eslint-disable-next-line consistent-return
-  function defaultToConfig2(prop) {
-    if (!utils.isUndefined(config2[prop])) {
-      return getMergedValue(undefined, config2[prop]);
-    } else if (!utils.isUndefined(config1[prop])) {
-      return getMergedValue(undefined, config1[prop]);
-    }
-  }
-
-  // eslint-disable-next-line consistent-return
-  function mergeDirectKeys(prop) {
-    if (prop in config2) {
-      return getMergedValue(config1[prop], config2[prop]);
-    } else if (prop in config1) {
-      return getMergedValue(undefined, config1[prop]);
-    }
-  }
-
-  var mergeMap = {
-    'url': valueFromConfig2,
-    'method': valueFromConfig2,
-    'data': valueFromConfig2,
-    'baseURL': defaultToConfig2,
-    'transformRequest': defaultToConfig2,
-    'transformResponse': defaultToConfig2,
-    'paramsSerializer': defaultToConfig2,
-    'timeout': defaultToConfig2,
-    'timeoutMessage': defaultToConfig2,
-    'withCredentials': defaultToConfig2,
-    'adapter': defaultToConfig2,
-    'responseType': defaultToConfig2,
-    'xsrfCookieName': defaultToConfig2,
-    'xsrfHeaderName': defaultToConfig2,
-    'onUploadProgress': defaultToConfig2,
-    'onDownloadProgress': defaultToConfig2,
-    'decompress': defaultToConfig2,
-    'maxContentLength': defaultToConfig2,
-    'maxBodyLength': defaultToConfig2,
-    'transport': defaultToConfig2,
-    'httpAgent': defaultToConfig2,
-    'httpsAgent': defaultToConfig2,
-    'cancelToken': defaultToConfig2,
-    'socketPath': defaultToConfig2,
-    'responseEncoding': defaultToConfig2,
-    'validateStatus': mergeDirectKeys
-  };
-
-  utils.forEach(Object.keys(config1).concat(Object.keys(config2)), function computeConfigValue(prop) {
-    var merge = mergeMap[prop] || mergeDeepProperties;
-    var configValue = merge(prop);
-    (utils.isUndefined(configValue) && merge !== mergeDirectKeys) || (config[prop] = configValue);
   });
+
+  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
+
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  utils.forEach(directMergeKeys, function merge(prop) {
+    if (prop in config2) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (prop in config1) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys)
+    .concat(directMergeKeys);
+
+  var otherKeys = Object
+    .keys(config1)
+    .concat(Object.keys(config2))
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, mergeDeepProperties);
 
   return config;
 };
@@ -4644,7 +4010,7 @@ var defaults = {
   }],
 
   transformResponse: [function transformResponse(data) {
-    var transitional = this.transitional || defaults.transitional;
+    var transitional = this.transitional;
     var silentJSONParsing = transitional && transitional.silentJSONParsing;
     var forcedJSONParsing = transitional && transitional.forcedJSONParsing;
     var strictJSONParsing = !silentJSONParsing && this.responseType === 'json';
@@ -4679,12 +4045,12 @@ var defaults = {
 
   validateStatus: function validateStatus(status) {
     return status >= 200 && status < 300;
-  },
+  }
+};
 
-  headers: {
-    common: {
-      'Accept': 'application/json, text/plain, */*'
-    }
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
   }
 };
 
@@ -4698,18 +4064,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-
-/***/ }),
-
-/***/ "./node_modules/axios/lib/env/data.js":
-/*!********************************************!*\
-  !*** ./node_modules/axios/lib/env/data.js ***!
-  \********************************************/
-/***/ ((module) => {
-
-module.exports = {
-  "version": "0.25.0"
-};
 
 /***/ }),
 
@@ -4924,7 +4278,7 @@ module.exports = function isAbsoluteURL(url) {
   // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
   // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
   // by any combination of letters, digits, plus, period, or hyphen.
-  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
 };
 
 
@@ -4934,12 +4288,10 @@ module.exports = function isAbsoluteURL(url) {
 /*!********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isAxiosError.js ***!
   \********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
 
-
-var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
 
 /**
  * Determines whether the payload is an error thrown by Axios
@@ -4948,7 +4300,7 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
  * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
  */
 module.exports = function isAxiosError(payload) {
-  return utils.isObject(payload) && (payload.isAxiosError === true);
+  return (typeof payload === 'object') && (payload.isAxiosError === true);
 };
 
 
@@ -5167,7 +4519,7 @@ module.exports = function spread(callback) {
 "use strict";
 
 
-var VERSION = (__webpack_require__(/*! ../env/data */ "./node_modules/axios/lib/env/data.js").version);
+var pkg = __webpack_require__(/*! ./../../package.json */ "./node_modules/axios/package.json");
 
 var validators = {};
 
@@ -5179,26 +4531,48 @@ var validators = {};
 });
 
 var deprecatedWarnings = {};
+var currentVerArr = pkg.version.split('.');
+
+/**
+ * Compare package versions
+ * @param {string} version
+ * @param {string?} thanVersion
+ * @returns {boolean}
+ */
+function isOlderVersion(version, thanVersion) {
+  var pkgVersionArr = thanVersion ? thanVersion.split('.') : currentVerArr;
+  var destVer = version.split('.');
+  for (var i = 0; i < 3; i++) {
+    if (pkgVersionArr[i] > destVer[i]) {
+      return true;
+    } else if (pkgVersionArr[i] < destVer[i]) {
+      return false;
+    }
+  }
+  return false;
+}
 
 /**
  * Transitional option validator
- * @param {function|boolean?} validator - set to false if the transitional option has been removed
- * @param {string?} version - deprecated version / removed since version
- * @param {string?} message - some message with additional info
+ * @param {function|boolean?} validator
+ * @param {string?} version
+ * @param {string} message
  * @returns {function}
  */
 validators.transitional = function transitional(validator, version, message) {
+  var isDeprecated = version && isOlderVersion(version);
+
   function formatMessage(opt, desc) {
-    return '[Axios v' + VERSION + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
+    return '[Axios v' + pkg.version + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
   }
 
   // eslint-disable-next-line func-names
   return function(value, opt, opts) {
     if (validator === false) {
-      throw new Error(formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')));
+      throw new Error(formatMessage(opt, ' has been removed in ' + version));
     }
 
-    if (version && !deprecatedWarnings[opt]) {
+    if (isDeprecated && !deprecatedWarnings[opt]) {
       deprecatedWarnings[opt] = true;
       // eslint-disable-next-line no-console
       console.warn(
@@ -5244,6 +4618,7 @@ function assertOptions(options, schema, allowUnknown) {
 }
 
 module.exports = {
+  isOlderVersion: isOlderVersion,
   assertOptions: assertOptions,
   validators: validators
 };
@@ -5273,7 +4648,7 @@ var toString = Object.prototype.toString;
  * @returns {boolean} True if value is an Array, otherwise false
  */
 function isArray(val) {
-  return Array.isArray(val);
+  return toString.call(val) === '[object Array]';
 }
 
 /**
@@ -5314,7 +4689,7 @@ function isArrayBuffer(val) {
  * @returns {boolean} True if value is an FormData, otherwise false
  */
 function isFormData(val) {
-  return toString.call(val) === '[object FormData]';
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
 }
 
 /**
@@ -5328,7 +4703,7 @@ function isArrayBufferView(val) {
   if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
     result = ArrayBuffer.isView(val);
   } else {
-    result = (val) && (val.buffer) && (isArrayBuffer(val.buffer));
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
   }
   return result;
 }
@@ -5435,7 +4810,7 @@ function isStream(val) {
  * @returns {boolean} True if value is a URLSearchParams object, otherwise false
  */
 function isURLSearchParams(val) {
-  return toString.call(val) === '[object URLSearchParams]';
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
 }
 
 /**
@@ -5620,7 +4995,9 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
+/* harmony import */ var animate_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
@@ -5656,6 +5033,106 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/animate.css/animate.css":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/animate.css/animate.css ***!
+  \********************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "@charset \"UTF-8\";/*!\n * animate.css - https://animate.style/\n * Version - 4.1.1\n * Licensed under the MIT license - http://opensource.org/licenses/MIT\n *\n * Copyright (c) 2020 Animate.css\n */\n:root {\n  --animate-duration: 1s;\n  --animate-delay: 1s;\n  --animate-repeat: 1;\n}\n.animate__animated {\n  -webkit-animation-duration: 1s;\n  animation-duration: 1s;\n  -webkit-animation-duration: var(--animate-duration);\n  animation-duration: var(--animate-duration);\n  -webkit-animation-fill-mode: both;\n  animation-fill-mode: both;\n}\n.animate__animated.animate__infinite {\n  -webkit-animation-iteration-count: infinite;\n  animation-iteration-count: infinite;\n}\n.animate__animated.animate__repeat-1 {\n  -webkit-animation-iteration-count: 1;\n  animation-iteration-count: 1;\n  -webkit-animation-iteration-count: var(--animate-repeat);\n  animation-iteration-count: var(--animate-repeat);\n}\n.animate__animated.animate__repeat-2 {\n  -webkit-animation-iteration-count: calc(1 * 2);\n  animation-iteration-count: calc(1 * 2);\n  -webkit-animation-iteration-count: calc(var(--animate-repeat) * 2);\n  animation-iteration-count: calc(var(--animate-repeat) * 2);\n}\n.animate__animated.animate__repeat-3 {\n  -webkit-animation-iteration-count: calc(1 * 3);\n  animation-iteration-count: calc(1 * 3);\n  -webkit-animation-iteration-count: calc(var(--animate-repeat) * 3);\n  animation-iteration-count: calc(var(--animate-repeat) * 3);\n}\n.animate__animated.animate__delay-1s {\n  -webkit-animation-delay: 1s;\n  animation-delay: 1s;\n  -webkit-animation-delay: var(--animate-delay);\n  animation-delay: var(--animate-delay);\n}\n.animate__animated.animate__delay-2s {\n  -webkit-animation-delay: calc(1s * 2);\n  animation-delay: calc(1s * 2);\n  -webkit-animation-delay: calc(var(--animate-delay) * 2);\n  animation-delay: calc(var(--animate-delay) * 2);\n}\n.animate__animated.animate__delay-3s {\n  -webkit-animation-delay: calc(1s * 3);\n  animation-delay: calc(1s * 3);\n  -webkit-animation-delay: calc(var(--animate-delay) * 3);\n  animation-delay: calc(var(--animate-delay) * 3);\n}\n.animate__animated.animate__delay-4s {\n  -webkit-animation-delay: calc(1s * 4);\n  animation-delay: calc(1s * 4);\n  -webkit-animation-delay: calc(var(--animate-delay) * 4);\n  animation-delay: calc(var(--animate-delay) * 4);\n}\n.animate__animated.animate__delay-5s {\n  -webkit-animation-delay: calc(1s * 5);\n  animation-delay: calc(1s * 5);\n  -webkit-animation-delay: calc(var(--animate-delay) * 5);\n  animation-delay: calc(var(--animate-delay) * 5);\n}\n.animate__animated.animate__faster {\n  -webkit-animation-duration: calc(1s / 2);\n  animation-duration: calc(1s / 2);\n  -webkit-animation-duration: calc(var(--animate-duration) / 2);\n  animation-duration: calc(var(--animate-duration) / 2);\n}\n.animate__animated.animate__fast {\n  -webkit-animation-duration: calc(1s * 0.8);\n  animation-duration: calc(1s * 0.8);\n  -webkit-animation-duration: calc(var(--animate-duration) * 0.8);\n  animation-duration: calc(var(--animate-duration) * 0.8);\n}\n.animate__animated.animate__slow {\n  -webkit-animation-duration: calc(1s * 2);\n  animation-duration: calc(1s * 2);\n  -webkit-animation-duration: calc(var(--animate-duration) * 2);\n  animation-duration: calc(var(--animate-duration) * 2);\n}\n.animate__animated.animate__slower {\n  -webkit-animation-duration: calc(1s * 3);\n  animation-duration: calc(1s * 3);\n  -webkit-animation-duration: calc(var(--animate-duration) * 3);\n  animation-duration: calc(var(--animate-duration) * 3);\n}\n@media print, (prefers-reduced-motion: reduce) {\n  .animate__animated {\n    -webkit-animation-duration: 1ms !important;\n    animation-duration: 1ms !important;\n    -webkit-transition-duration: 1ms !important;\n    transition-duration: 1ms !important;\n    -webkit-animation-iteration-count: 1 !important;\n    animation-iteration-count: 1 !important;\n  }\n\n  .animate__animated[class*='Out'] {\n    opacity: 0;\n  }\n}\n/* Attention seekers  */\n@-webkit-keyframes bounce {\n  from,\n  20%,\n  53%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  40%,\n  43% {\n    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    -webkit-transform: translate3d(0, -30px, 0) scaleY(1.1);\n    transform: translate3d(0, -30px, 0) scaleY(1.1);\n  }\n\n  70% {\n    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    -webkit-transform: translate3d(0, -15px, 0) scaleY(1.05);\n    transform: translate3d(0, -15px, 0) scaleY(1.05);\n  }\n\n  80% {\n    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    -webkit-transform: translate3d(0, 0, 0) scaleY(0.95);\n    transform: translate3d(0, 0, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, -4px, 0) scaleY(1.02);\n    transform: translate3d(0, -4px, 0) scaleY(1.02);\n  }\n}\n@keyframes bounce {\n  from,\n  20%,\n  53%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  40%,\n  43% {\n    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    -webkit-transform: translate3d(0, -30px, 0) scaleY(1.1);\n    transform: translate3d(0, -30px, 0) scaleY(1.1);\n  }\n\n  70% {\n    -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);\n    -webkit-transform: translate3d(0, -15px, 0) scaleY(1.05);\n    transform: translate3d(0, -15px, 0) scaleY(1.05);\n  }\n\n  80% {\n    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    -webkit-transform: translate3d(0, 0, 0) scaleY(0.95);\n    transform: translate3d(0, 0, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, -4px, 0) scaleY(1.02);\n    transform: translate3d(0, -4px, 0) scaleY(1.02);\n  }\n}\n.animate__bounce {\n  -webkit-animation-name: bounce;\n  animation-name: bounce;\n  -webkit-transform-origin: center bottom;\n  transform-origin: center bottom;\n}\n@-webkit-keyframes flash {\n  from,\n  50%,\n  to {\n    opacity: 1;\n  }\n\n  25%,\n  75% {\n    opacity: 0;\n  }\n}\n@keyframes flash {\n  from,\n  50%,\n  to {\n    opacity: 1;\n  }\n\n  25%,\n  75% {\n    opacity: 0;\n  }\n}\n.animate__flash {\n  -webkit-animation-name: flash;\n  animation-name: flash;\n}\n/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */\n@-webkit-keyframes pulse {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  50% {\n    -webkit-transform: scale3d(1.05, 1.05, 1.05);\n    transform: scale3d(1.05, 1.05, 1.05);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n@keyframes pulse {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  50% {\n    -webkit-transform: scale3d(1.05, 1.05, 1.05);\n    transform: scale3d(1.05, 1.05, 1.05);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n.animate__pulse {\n  -webkit-animation-name: pulse;\n  animation-name: pulse;\n  -webkit-animation-timing-function: ease-in-out;\n  animation-timing-function: ease-in-out;\n}\n@-webkit-keyframes rubberBand {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  30% {\n    -webkit-transform: scale3d(1.25, 0.75, 1);\n    transform: scale3d(1.25, 0.75, 1);\n  }\n\n  40% {\n    -webkit-transform: scale3d(0.75, 1.25, 1);\n    transform: scale3d(0.75, 1.25, 1);\n  }\n\n  50% {\n    -webkit-transform: scale3d(1.15, 0.85, 1);\n    transform: scale3d(1.15, 0.85, 1);\n  }\n\n  65% {\n    -webkit-transform: scale3d(0.95, 1.05, 1);\n    transform: scale3d(0.95, 1.05, 1);\n  }\n\n  75% {\n    -webkit-transform: scale3d(1.05, 0.95, 1);\n    transform: scale3d(1.05, 0.95, 1);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n@keyframes rubberBand {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  30% {\n    -webkit-transform: scale3d(1.25, 0.75, 1);\n    transform: scale3d(1.25, 0.75, 1);\n  }\n\n  40% {\n    -webkit-transform: scale3d(0.75, 1.25, 1);\n    transform: scale3d(0.75, 1.25, 1);\n  }\n\n  50% {\n    -webkit-transform: scale3d(1.15, 0.85, 1);\n    transform: scale3d(1.15, 0.85, 1);\n  }\n\n  65% {\n    -webkit-transform: scale3d(0.95, 1.05, 1);\n    transform: scale3d(0.95, 1.05, 1);\n  }\n\n  75% {\n    -webkit-transform: scale3d(1.05, 0.95, 1);\n    transform: scale3d(1.05, 0.95, 1);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n.animate__rubberBand {\n  -webkit-animation-name: rubberBand;\n  animation-name: rubberBand;\n}\n@-webkit-keyframes shakeX {\n  from,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  10%,\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: translate3d(-10px, 0, 0);\n    transform: translate3d(-10px, 0, 0);\n  }\n\n  20%,\n  40%,\n  60%,\n  80% {\n    -webkit-transform: translate3d(10px, 0, 0);\n    transform: translate3d(10px, 0, 0);\n  }\n}\n@keyframes shakeX {\n  from,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  10%,\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: translate3d(-10px, 0, 0);\n    transform: translate3d(-10px, 0, 0);\n  }\n\n  20%,\n  40%,\n  60%,\n  80% {\n    -webkit-transform: translate3d(10px, 0, 0);\n    transform: translate3d(10px, 0, 0);\n  }\n}\n.animate__shakeX {\n  -webkit-animation-name: shakeX;\n  animation-name: shakeX;\n}\n@-webkit-keyframes shakeY {\n  from,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  10%,\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: translate3d(0, -10px, 0);\n    transform: translate3d(0, -10px, 0);\n  }\n\n  20%,\n  40%,\n  60%,\n  80% {\n    -webkit-transform: translate3d(0, 10px, 0);\n    transform: translate3d(0, 10px, 0);\n  }\n}\n@keyframes shakeY {\n  from,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  10%,\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: translate3d(0, -10px, 0);\n    transform: translate3d(0, -10px, 0);\n  }\n\n  20%,\n  40%,\n  60%,\n  80% {\n    -webkit-transform: translate3d(0, 10px, 0);\n    transform: translate3d(0, 10px, 0);\n  }\n}\n.animate__shakeY {\n  -webkit-animation-name: shakeY;\n  animation-name: shakeY;\n}\n@-webkit-keyframes headShake {\n  0% {\n    -webkit-transform: translateX(0);\n    transform: translateX(0);\n  }\n\n  6.5% {\n    -webkit-transform: translateX(-6px) rotateY(-9deg);\n    transform: translateX(-6px) rotateY(-9deg);\n  }\n\n  18.5% {\n    -webkit-transform: translateX(5px) rotateY(7deg);\n    transform: translateX(5px) rotateY(7deg);\n  }\n\n  31.5% {\n    -webkit-transform: translateX(-3px) rotateY(-5deg);\n    transform: translateX(-3px) rotateY(-5deg);\n  }\n\n  43.5% {\n    -webkit-transform: translateX(2px) rotateY(3deg);\n    transform: translateX(2px) rotateY(3deg);\n  }\n\n  50% {\n    -webkit-transform: translateX(0);\n    transform: translateX(0);\n  }\n}\n@keyframes headShake {\n  0% {\n    -webkit-transform: translateX(0);\n    transform: translateX(0);\n  }\n\n  6.5% {\n    -webkit-transform: translateX(-6px) rotateY(-9deg);\n    transform: translateX(-6px) rotateY(-9deg);\n  }\n\n  18.5% {\n    -webkit-transform: translateX(5px) rotateY(7deg);\n    transform: translateX(5px) rotateY(7deg);\n  }\n\n  31.5% {\n    -webkit-transform: translateX(-3px) rotateY(-5deg);\n    transform: translateX(-3px) rotateY(-5deg);\n  }\n\n  43.5% {\n    -webkit-transform: translateX(2px) rotateY(3deg);\n    transform: translateX(2px) rotateY(3deg);\n  }\n\n  50% {\n    -webkit-transform: translateX(0);\n    transform: translateX(0);\n  }\n}\n.animate__headShake {\n  -webkit-animation-timing-function: ease-in-out;\n  animation-timing-function: ease-in-out;\n  -webkit-animation-name: headShake;\n  animation-name: headShake;\n}\n@-webkit-keyframes swing {\n  20% {\n    -webkit-transform: rotate3d(0, 0, 1, 15deg);\n    transform: rotate3d(0, 0, 1, 15deg);\n  }\n\n  40% {\n    -webkit-transform: rotate3d(0, 0, 1, -10deg);\n    transform: rotate3d(0, 0, 1, -10deg);\n  }\n\n  60% {\n    -webkit-transform: rotate3d(0, 0, 1, 5deg);\n    transform: rotate3d(0, 0, 1, 5deg);\n  }\n\n  80% {\n    -webkit-transform: rotate3d(0, 0, 1, -5deg);\n    transform: rotate3d(0, 0, 1, -5deg);\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 0deg);\n    transform: rotate3d(0, 0, 1, 0deg);\n  }\n}\n@keyframes swing {\n  20% {\n    -webkit-transform: rotate3d(0, 0, 1, 15deg);\n    transform: rotate3d(0, 0, 1, 15deg);\n  }\n\n  40% {\n    -webkit-transform: rotate3d(0, 0, 1, -10deg);\n    transform: rotate3d(0, 0, 1, -10deg);\n  }\n\n  60% {\n    -webkit-transform: rotate3d(0, 0, 1, 5deg);\n    transform: rotate3d(0, 0, 1, 5deg);\n  }\n\n  80% {\n    -webkit-transform: rotate3d(0, 0, 1, -5deg);\n    transform: rotate3d(0, 0, 1, -5deg);\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 0deg);\n    transform: rotate3d(0, 0, 1, 0deg);\n  }\n}\n.animate__swing {\n  -webkit-transform-origin: top center;\n  transform-origin: top center;\n  -webkit-animation-name: swing;\n  animation-name: swing;\n}\n@-webkit-keyframes tada {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  10%,\n  20% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);\n    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);\n  }\n\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);\n    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);\n  }\n\n  40%,\n  60%,\n  80% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);\n    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n@keyframes tada {\n  from {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n\n  10%,\n  20% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);\n    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);\n  }\n\n  30%,\n  50%,\n  70%,\n  90% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);\n    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);\n  }\n\n  40%,\n  60%,\n  80% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);\n    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);\n  }\n\n  to {\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n.animate__tada {\n  -webkit-animation-name: tada;\n  animation-name: tada;\n}\n/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */\n@-webkit-keyframes wobble {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  15% {\n    -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);\n    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);\n  }\n\n  30% {\n    -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);\n    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);\n  }\n\n  45% {\n    -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);\n    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);\n  }\n\n  60% {\n    -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);\n    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);\n  }\n\n  75% {\n    -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);\n    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes wobble {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  15% {\n    -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);\n    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);\n  }\n\n  30% {\n    -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);\n    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);\n  }\n\n  45% {\n    -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);\n    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);\n  }\n\n  60% {\n    -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);\n    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);\n  }\n\n  75% {\n    -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);\n    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__wobble {\n  -webkit-animation-name: wobble;\n  animation-name: wobble;\n}\n@-webkit-keyframes jello {\n  from,\n  11.1%,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  22.2% {\n    -webkit-transform: skewX(-12.5deg) skewY(-12.5deg);\n    transform: skewX(-12.5deg) skewY(-12.5deg);\n  }\n\n  33.3% {\n    -webkit-transform: skewX(6.25deg) skewY(6.25deg);\n    transform: skewX(6.25deg) skewY(6.25deg);\n  }\n\n  44.4% {\n    -webkit-transform: skewX(-3.125deg) skewY(-3.125deg);\n    transform: skewX(-3.125deg) skewY(-3.125deg);\n  }\n\n  55.5% {\n    -webkit-transform: skewX(1.5625deg) skewY(1.5625deg);\n    transform: skewX(1.5625deg) skewY(1.5625deg);\n  }\n\n  66.6% {\n    -webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);\n    transform: skewX(-0.78125deg) skewY(-0.78125deg);\n  }\n\n  77.7% {\n    -webkit-transform: skewX(0.390625deg) skewY(0.390625deg);\n    transform: skewX(0.390625deg) skewY(0.390625deg);\n  }\n\n  88.8% {\n    -webkit-transform: skewX(-0.1953125deg) skewY(-0.1953125deg);\n    transform: skewX(-0.1953125deg) skewY(-0.1953125deg);\n  }\n}\n@keyframes jello {\n  from,\n  11.1%,\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  22.2% {\n    -webkit-transform: skewX(-12.5deg) skewY(-12.5deg);\n    transform: skewX(-12.5deg) skewY(-12.5deg);\n  }\n\n  33.3% {\n    -webkit-transform: skewX(6.25deg) skewY(6.25deg);\n    transform: skewX(6.25deg) skewY(6.25deg);\n  }\n\n  44.4% {\n    -webkit-transform: skewX(-3.125deg) skewY(-3.125deg);\n    transform: skewX(-3.125deg) skewY(-3.125deg);\n  }\n\n  55.5% {\n    -webkit-transform: skewX(1.5625deg) skewY(1.5625deg);\n    transform: skewX(1.5625deg) skewY(1.5625deg);\n  }\n\n  66.6% {\n    -webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);\n    transform: skewX(-0.78125deg) skewY(-0.78125deg);\n  }\n\n  77.7% {\n    -webkit-transform: skewX(0.390625deg) skewY(0.390625deg);\n    transform: skewX(0.390625deg) skewY(0.390625deg);\n  }\n\n  88.8% {\n    -webkit-transform: skewX(-0.1953125deg) skewY(-0.1953125deg);\n    transform: skewX(-0.1953125deg) skewY(-0.1953125deg);\n  }\n}\n.animate__jello {\n  -webkit-animation-name: jello;\n  animation-name: jello;\n  -webkit-transform-origin: center;\n  transform-origin: center;\n}\n@-webkit-keyframes heartBeat {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n\n  14% {\n    -webkit-transform: scale(1.3);\n    transform: scale(1.3);\n  }\n\n  28% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n\n  42% {\n    -webkit-transform: scale(1.3);\n    transform: scale(1.3);\n  }\n\n  70% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n}\n@keyframes heartBeat {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n\n  14% {\n    -webkit-transform: scale(1.3);\n    transform: scale(1.3);\n  }\n\n  28% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n\n  42% {\n    -webkit-transform: scale(1.3);\n    transform: scale(1.3);\n  }\n\n  70% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n}\n.animate__heartBeat {\n  -webkit-animation-name: heartBeat;\n  animation-name: heartBeat;\n  -webkit-animation-duration: calc(1s * 1.3);\n  animation-duration: calc(1s * 1.3);\n  -webkit-animation-duration: calc(var(--animate-duration) * 1.3);\n  animation-duration: calc(var(--animate-duration) * 1.3);\n  -webkit-animation-timing-function: ease-in-out;\n  animation-timing-function: ease-in-out;\n}\n/* Back entrances */\n@-webkit-keyframes backInDown {\n  0% {\n    -webkit-transform: translateY(-1200px) scale(0.7);\n    transform: translateY(-1200px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n@keyframes backInDown {\n  0% {\n    -webkit-transform: translateY(-1200px) scale(0.7);\n    transform: translateY(-1200px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n.animate__backInDown {\n  -webkit-animation-name: backInDown;\n  animation-name: backInDown;\n}\n@-webkit-keyframes backInLeft {\n  0% {\n    -webkit-transform: translateX(-2000px) scale(0.7);\n    transform: translateX(-2000px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n@keyframes backInLeft {\n  0% {\n    -webkit-transform: translateX(-2000px) scale(0.7);\n    transform: translateX(-2000px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n.animate__backInLeft {\n  -webkit-animation-name: backInLeft;\n  animation-name: backInLeft;\n}\n@-webkit-keyframes backInRight {\n  0% {\n    -webkit-transform: translateX(2000px) scale(0.7);\n    transform: translateX(2000px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n@keyframes backInRight {\n  0% {\n    -webkit-transform: translateX(2000px) scale(0.7);\n    transform: translateX(2000px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n.animate__backInRight {\n  -webkit-animation-name: backInRight;\n  animation-name: backInRight;\n}\n@-webkit-keyframes backInUp {\n  0% {\n    -webkit-transform: translateY(1200px) scale(0.7);\n    transform: translateY(1200px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n@keyframes backInUp {\n  0% {\n    -webkit-transform: translateY(1200px) scale(0.7);\n    transform: translateY(1200px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  80% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n}\n.animate__backInUp {\n  -webkit-animation-name: backInUp;\n  animation-name: backInUp;\n}\n/* Back exits */\n@-webkit-keyframes backOutDown {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateY(700px) scale(0.7);\n    transform: translateY(700px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n@keyframes backOutDown {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateY(700px) scale(0.7);\n    transform: translateY(700px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n.animate__backOutDown {\n  -webkit-animation-name: backOutDown;\n  animation-name: backOutDown;\n}\n@-webkit-keyframes backOutLeft {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateX(-2000px) scale(0.7);\n    transform: translateX(-2000px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n@keyframes backOutLeft {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateX(-2000px) scale(0.7);\n    transform: translateX(-2000px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n.animate__backOutLeft {\n  -webkit-animation-name: backOutLeft;\n  animation-name: backOutLeft;\n}\n@-webkit-keyframes backOutRight {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateX(2000px) scale(0.7);\n    transform: translateX(2000px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n@keyframes backOutRight {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateX(0px) scale(0.7);\n    transform: translateX(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateX(2000px) scale(0.7);\n    transform: translateX(2000px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n.animate__backOutRight {\n  -webkit-animation-name: backOutRight;\n  animation-name: backOutRight;\n}\n@-webkit-keyframes backOutUp {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateY(-700px) scale(0.7);\n    transform: translateY(-700px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n@keyframes backOutUp {\n  0% {\n    -webkit-transform: scale(1);\n    transform: scale(1);\n    opacity: 1;\n  }\n\n  20% {\n    -webkit-transform: translateY(0px) scale(0.7);\n    transform: translateY(0px) scale(0.7);\n    opacity: 0.7;\n  }\n\n  100% {\n    -webkit-transform: translateY(-700px) scale(0.7);\n    transform: translateY(-700px) scale(0.7);\n    opacity: 0.7;\n  }\n}\n.animate__backOutUp {\n  -webkit-animation-name: backOutUp;\n  animation-name: backOutUp;\n}\n/* Bouncing entrances  */\n@-webkit-keyframes bounceIn {\n  from,\n  20%,\n  40%,\n  60%,\n  80%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  20% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1);\n    transform: scale3d(1.1, 1.1, 1.1);\n  }\n\n  40% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9);\n    transform: scale3d(0.9, 0.9, 0.9);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(1.03, 1.03, 1.03);\n    transform: scale3d(1.03, 1.03, 1.03);\n  }\n\n  80% {\n    -webkit-transform: scale3d(0.97, 0.97, 0.97);\n    transform: scale3d(0.97, 0.97, 0.97);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n@keyframes bounceIn {\n  from,\n  20%,\n  40%,\n  60%,\n  80%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  20% {\n    -webkit-transform: scale3d(1.1, 1.1, 1.1);\n    transform: scale3d(1.1, 1.1, 1.1);\n  }\n\n  40% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9);\n    transform: scale3d(0.9, 0.9, 0.9);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(1.03, 1.03, 1.03);\n    transform: scale3d(1.03, 1.03, 1.03);\n  }\n\n  80% {\n    -webkit-transform: scale3d(0.97, 0.97, 0.97);\n    transform: scale3d(0.97, 0.97, 0.97);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: scale3d(1, 1, 1);\n    transform: scale3d(1, 1, 1);\n  }\n}\n.animate__bounceIn {\n  -webkit-animation-duration: calc(1s * 0.75);\n  animation-duration: calc(1s * 0.75);\n  -webkit-animation-duration: calc(var(--animate-duration) * 0.75);\n  animation-duration: calc(var(--animate-duration) * 0.75);\n  -webkit-animation-name: bounceIn;\n  animation-name: bounceIn;\n}\n@-webkit-keyframes bounceInDown {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -3000px, 0) scaleY(3);\n    transform: translate3d(0, -3000px, 0) scaleY(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 25px, 0) scaleY(0.9);\n    transform: translate3d(0, 25px, 0) scaleY(0.9);\n  }\n\n  75% {\n    -webkit-transform: translate3d(0, -10px, 0) scaleY(0.95);\n    transform: translate3d(0, -10px, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, 5px, 0) scaleY(0.985);\n    transform: translate3d(0, 5px, 0) scaleY(0.985);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes bounceInDown {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -3000px, 0) scaleY(3);\n    transform: translate3d(0, -3000px, 0) scaleY(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 25px, 0) scaleY(0.9);\n    transform: translate3d(0, 25px, 0) scaleY(0.9);\n  }\n\n  75% {\n    -webkit-transform: translate3d(0, -10px, 0) scaleY(0.95);\n    transform: translate3d(0, -10px, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, 5px, 0) scaleY(0.985);\n    transform: translate3d(0, 5px, 0) scaleY(0.985);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__bounceInDown {\n  -webkit-animation-name: bounceInDown;\n  animation-name: bounceInDown;\n}\n@-webkit-keyframes bounceInLeft {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(-3000px, 0, 0) scaleX(3);\n    transform: translate3d(-3000px, 0, 0) scaleX(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(25px, 0, 0) scaleX(1);\n    transform: translate3d(25px, 0, 0) scaleX(1);\n  }\n\n  75% {\n    -webkit-transform: translate3d(-10px, 0, 0) scaleX(0.98);\n    transform: translate3d(-10px, 0, 0) scaleX(0.98);\n  }\n\n  90% {\n    -webkit-transform: translate3d(5px, 0, 0) scaleX(0.995);\n    transform: translate3d(5px, 0, 0) scaleX(0.995);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes bounceInLeft {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  0% {\n    opacity: 0;\n    -webkit-transform: translate3d(-3000px, 0, 0) scaleX(3);\n    transform: translate3d(-3000px, 0, 0) scaleX(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(25px, 0, 0) scaleX(1);\n    transform: translate3d(25px, 0, 0) scaleX(1);\n  }\n\n  75% {\n    -webkit-transform: translate3d(-10px, 0, 0) scaleX(0.98);\n    transform: translate3d(-10px, 0, 0) scaleX(0.98);\n  }\n\n  90% {\n    -webkit-transform: translate3d(5px, 0, 0) scaleX(0.995);\n    transform: translate3d(5px, 0, 0) scaleX(0.995);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__bounceInLeft {\n  -webkit-animation-name: bounceInLeft;\n  animation-name: bounceInLeft;\n}\n@-webkit-keyframes bounceInRight {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(3000px, 0, 0) scaleX(3);\n    transform: translate3d(3000px, 0, 0) scaleX(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(-25px, 0, 0) scaleX(1);\n    transform: translate3d(-25px, 0, 0) scaleX(1);\n  }\n\n  75% {\n    -webkit-transform: translate3d(10px, 0, 0) scaleX(0.98);\n    transform: translate3d(10px, 0, 0) scaleX(0.98);\n  }\n\n  90% {\n    -webkit-transform: translate3d(-5px, 0, 0) scaleX(0.995);\n    transform: translate3d(-5px, 0, 0) scaleX(0.995);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes bounceInRight {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(3000px, 0, 0) scaleX(3);\n    transform: translate3d(3000px, 0, 0) scaleX(3);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(-25px, 0, 0) scaleX(1);\n    transform: translate3d(-25px, 0, 0) scaleX(1);\n  }\n\n  75% {\n    -webkit-transform: translate3d(10px, 0, 0) scaleX(0.98);\n    transform: translate3d(10px, 0, 0) scaleX(0.98);\n  }\n\n  90% {\n    -webkit-transform: translate3d(-5px, 0, 0) scaleX(0.995);\n    transform: translate3d(-5px, 0, 0) scaleX(0.995);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__bounceInRight {\n  -webkit-animation-name: bounceInRight;\n  animation-name: bounceInRight;\n}\n@-webkit-keyframes bounceInUp {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 3000px, 0) scaleY(5);\n    transform: translate3d(0, 3000px, 0) scaleY(5);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, -20px, 0) scaleY(0.9);\n    transform: translate3d(0, -20px, 0) scaleY(0.9);\n  }\n\n  75% {\n    -webkit-transform: translate3d(0, 10px, 0) scaleY(0.95);\n    transform: translate3d(0, 10px, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, -5px, 0) scaleY(0.985);\n    transform: translate3d(0, -5px, 0) scaleY(0.985);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes bounceInUp {\n  from,\n  60%,\n  75%,\n  90%,\n  to {\n    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);\n  }\n\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 3000px, 0) scaleY(5);\n    transform: translate3d(0, 3000px, 0) scaleY(5);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, -20px, 0) scaleY(0.9);\n    transform: translate3d(0, -20px, 0) scaleY(0.9);\n  }\n\n  75% {\n    -webkit-transform: translate3d(0, 10px, 0) scaleY(0.95);\n    transform: translate3d(0, 10px, 0) scaleY(0.95);\n  }\n\n  90% {\n    -webkit-transform: translate3d(0, -5px, 0) scaleY(0.985);\n    transform: translate3d(0, -5px, 0) scaleY(0.985);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__bounceInUp {\n  -webkit-animation-name: bounceInUp;\n  animation-name: bounceInUp;\n}\n/* Bouncing exits  */\n@-webkit-keyframes bounceOut {\n  20% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9);\n    transform: scale3d(0.9, 0.9, 0.9);\n  }\n\n  50%,\n  55% {\n    opacity: 1;\n    -webkit-transform: scale3d(1.1, 1.1, 1.1);\n    transform: scale3d(1.1, 1.1, 1.1);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n}\n@keyframes bounceOut {\n  20% {\n    -webkit-transform: scale3d(0.9, 0.9, 0.9);\n    transform: scale3d(0.9, 0.9, 0.9);\n  }\n\n  50%,\n  55% {\n    opacity: 1;\n    -webkit-transform: scale3d(1.1, 1.1, 1.1);\n    transform: scale3d(1.1, 1.1, 1.1);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n}\n.animate__bounceOut {\n  -webkit-animation-duration: calc(1s * 0.75);\n  animation-duration: calc(1s * 0.75);\n  -webkit-animation-duration: calc(var(--animate-duration) * 0.75);\n  animation-duration: calc(var(--animate-duration) * 0.75);\n  -webkit-animation-name: bounceOut;\n  animation-name: bounceOut;\n}\n@-webkit-keyframes bounceOutDown {\n  20% {\n    -webkit-transform: translate3d(0, 10px, 0) scaleY(0.985);\n    transform: translate3d(0, 10px, 0) scaleY(0.985);\n  }\n\n  40%,\n  45% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, -20px, 0) scaleY(0.9);\n    transform: translate3d(0, -20px, 0) scaleY(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0) scaleY(3);\n    transform: translate3d(0, 2000px, 0) scaleY(3);\n  }\n}\n@keyframes bounceOutDown {\n  20% {\n    -webkit-transform: translate3d(0, 10px, 0) scaleY(0.985);\n    transform: translate3d(0, 10px, 0) scaleY(0.985);\n  }\n\n  40%,\n  45% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, -20px, 0) scaleY(0.9);\n    transform: translate3d(0, -20px, 0) scaleY(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0) scaleY(3);\n    transform: translate3d(0, 2000px, 0) scaleY(3);\n  }\n}\n.animate__bounceOutDown {\n  -webkit-animation-name: bounceOutDown;\n  animation-name: bounceOutDown;\n}\n@-webkit-keyframes bounceOutLeft {\n  20% {\n    opacity: 1;\n    -webkit-transform: translate3d(20px, 0, 0) scaleX(0.9);\n    transform: translate3d(20px, 0, 0) scaleX(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0) scaleX(2);\n    transform: translate3d(-2000px, 0, 0) scaleX(2);\n  }\n}\n@keyframes bounceOutLeft {\n  20% {\n    opacity: 1;\n    -webkit-transform: translate3d(20px, 0, 0) scaleX(0.9);\n    transform: translate3d(20px, 0, 0) scaleX(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0) scaleX(2);\n    transform: translate3d(-2000px, 0, 0) scaleX(2);\n  }\n}\n.animate__bounceOutLeft {\n  -webkit-animation-name: bounceOutLeft;\n  animation-name: bounceOutLeft;\n}\n@-webkit-keyframes bounceOutRight {\n  20% {\n    opacity: 1;\n    -webkit-transform: translate3d(-20px, 0, 0) scaleX(0.9);\n    transform: translate3d(-20px, 0, 0) scaleX(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0) scaleX(2);\n    transform: translate3d(2000px, 0, 0) scaleX(2);\n  }\n}\n@keyframes bounceOutRight {\n  20% {\n    opacity: 1;\n    -webkit-transform: translate3d(-20px, 0, 0) scaleX(0.9);\n    transform: translate3d(-20px, 0, 0) scaleX(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0) scaleX(2);\n    transform: translate3d(2000px, 0, 0) scaleX(2);\n  }\n}\n.animate__bounceOutRight {\n  -webkit-animation-name: bounceOutRight;\n  animation-name: bounceOutRight;\n}\n@-webkit-keyframes bounceOutUp {\n  20% {\n    -webkit-transform: translate3d(0, -10px, 0) scaleY(0.985);\n    transform: translate3d(0, -10px, 0) scaleY(0.985);\n  }\n\n  40%,\n  45% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 20px, 0) scaleY(0.9);\n    transform: translate3d(0, 20px, 0) scaleY(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0) scaleY(3);\n    transform: translate3d(0, -2000px, 0) scaleY(3);\n  }\n}\n@keyframes bounceOutUp {\n  20% {\n    -webkit-transform: translate3d(0, -10px, 0) scaleY(0.985);\n    transform: translate3d(0, -10px, 0) scaleY(0.985);\n  }\n\n  40%,\n  45% {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 20px, 0) scaleY(0.9);\n    transform: translate3d(0, 20px, 0) scaleY(0.9);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0) scaleY(3);\n    transform: translate3d(0, -2000px, 0) scaleY(3);\n  }\n}\n.animate__bounceOutUp {\n  -webkit-animation-name: bounceOutUp;\n  animation-name: bounceOutUp;\n}\n/* Fading entrances  */\n@-webkit-keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n\n  to {\n    opacity: 1;\n  }\n}\n@keyframes fadeIn {\n  from {\n    opacity: 0;\n  }\n\n  to {\n    opacity: 1;\n  }\n}\n.animate__fadeIn {\n  -webkit-animation-name: fadeIn;\n  animation-name: fadeIn;\n}\n@-webkit-keyframes fadeInDown {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInDown {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInDown {\n  -webkit-animation-name: fadeInDown;\n  animation-name: fadeInDown;\n}\n@-webkit-keyframes fadeInDownBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0);\n    transform: translate3d(0, -2000px, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInDownBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0);\n    transform: translate3d(0, -2000px, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInDownBig {\n  -webkit-animation-name: fadeInDownBig;\n  animation-name: fadeInDownBig;\n}\n@-webkit-keyframes fadeInLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInLeft {\n  -webkit-animation-name: fadeInLeft;\n  animation-name: fadeInLeft;\n}\n@-webkit-keyframes fadeInLeftBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0);\n    transform: translate3d(-2000px, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInLeftBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0);\n    transform: translate3d(-2000px, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInLeftBig {\n  -webkit-animation-name: fadeInLeftBig;\n  animation-name: fadeInLeftBig;\n}\n@-webkit-keyframes fadeInRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInRight {\n  -webkit-animation-name: fadeInRight;\n  animation-name: fadeInRight;\n}\n@-webkit-keyframes fadeInRightBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0);\n    transform: translate3d(2000px, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInRightBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0);\n    transform: translate3d(2000px, 0, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInRightBig {\n  -webkit-animation-name: fadeInRightBig;\n  animation-name: fadeInRightBig;\n}\n@-webkit-keyframes fadeInUp {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInUp {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInUp {\n  -webkit-animation-name: fadeInUp;\n  animation-name: fadeInUp;\n}\n@-webkit-keyframes fadeInUpBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0);\n    transform: translate3d(0, 2000px, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInUpBig {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0);\n    transform: translate3d(0, 2000px, 0);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInUpBig {\n  -webkit-animation-name: fadeInUpBig;\n  animation-name: fadeInUpBig;\n}\n@-webkit-keyframes fadeInTopLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, -100%, 0);\n    transform: translate3d(-100%, -100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInTopLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, -100%, 0);\n    transform: translate3d(-100%, -100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInTopLeft {\n  -webkit-animation-name: fadeInTopLeft;\n  animation-name: fadeInTopLeft;\n}\n@-webkit-keyframes fadeInTopRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, -100%, 0);\n    transform: translate3d(100%, -100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInTopRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, -100%, 0);\n    transform: translate3d(100%, -100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInTopRight {\n  -webkit-animation-name: fadeInTopRight;\n  animation-name: fadeInTopRight;\n}\n@-webkit-keyframes fadeInBottomLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 100%, 0);\n    transform: translate3d(-100%, 100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInBottomLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 100%, 0);\n    transform: translate3d(-100%, 100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInBottomLeft {\n  -webkit-animation-name: fadeInBottomLeft;\n  animation-name: fadeInBottomLeft;\n}\n@-webkit-keyframes fadeInBottomRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 100%, 0);\n    transform: translate3d(100%, 100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes fadeInBottomRight {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 100%, 0);\n    transform: translate3d(100%, 100%, 0);\n  }\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__fadeInBottomRight {\n  -webkit-animation-name: fadeInBottomRight;\n  animation-name: fadeInBottomRight;\n}\n/* Fading exits */\n@-webkit-keyframes fadeOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n  }\n}\n@keyframes fadeOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n  }\n}\n.animate__fadeOut {\n  -webkit-animation-name: fadeOut;\n  animation-name: fadeOut;\n}\n@-webkit-keyframes fadeOutDown {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n}\n@keyframes fadeOutDown {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n}\n.animate__fadeOutDown {\n  -webkit-animation-name: fadeOutDown;\n  animation-name: fadeOutDown;\n}\n@-webkit-keyframes fadeOutDownBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0);\n    transform: translate3d(0, 2000px, 0);\n  }\n}\n@keyframes fadeOutDownBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, 2000px, 0);\n    transform: translate3d(0, 2000px, 0);\n  }\n}\n.animate__fadeOutDownBig {\n  -webkit-animation-name: fadeOutDownBig;\n  animation-name: fadeOutDownBig;\n}\n@-webkit-keyframes fadeOutLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n}\n@keyframes fadeOutLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n}\n.animate__fadeOutLeft {\n  -webkit-animation-name: fadeOutLeft;\n  animation-name: fadeOutLeft;\n}\n@-webkit-keyframes fadeOutLeftBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0);\n    transform: translate3d(-2000px, 0, 0);\n  }\n}\n@keyframes fadeOutLeftBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-2000px, 0, 0);\n    transform: translate3d(-2000px, 0, 0);\n  }\n}\n.animate__fadeOutLeftBig {\n  -webkit-animation-name: fadeOutLeftBig;\n  animation-name: fadeOutLeftBig;\n}\n@-webkit-keyframes fadeOutRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n}\n@keyframes fadeOutRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n}\n.animate__fadeOutRight {\n  -webkit-animation-name: fadeOutRight;\n  animation-name: fadeOutRight;\n}\n@-webkit-keyframes fadeOutRightBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0);\n    transform: translate3d(2000px, 0, 0);\n  }\n}\n@keyframes fadeOutRightBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(2000px, 0, 0);\n    transform: translate3d(2000px, 0, 0);\n  }\n}\n.animate__fadeOutRightBig {\n  -webkit-animation-name: fadeOutRightBig;\n  animation-name: fadeOutRightBig;\n}\n@-webkit-keyframes fadeOutUp {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n}\n@keyframes fadeOutUp {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n}\n.animate__fadeOutUp {\n  -webkit-animation-name: fadeOutUp;\n  animation-name: fadeOutUp;\n}\n@-webkit-keyframes fadeOutUpBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0);\n    transform: translate3d(0, -2000px, 0);\n  }\n}\n@keyframes fadeOutUpBig {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(0, -2000px, 0);\n    transform: translate3d(0, -2000px, 0);\n  }\n}\n.animate__fadeOutUpBig {\n  -webkit-animation-name: fadeOutUpBig;\n  animation-name: fadeOutUpBig;\n}\n@-webkit-keyframes fadeOutTopLeft {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, -100%, 0);\n    transform: translate3d(-100%, -100%, 0);\n  }\n}\n@keyframes fadeOutTopLeft {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, -100%, 0);\n    transform: translate3d(-100%, -100%, 0);\n  }\n}\n.animate__fadeOutTopLeft {\n  -webkit-animation-name: fadeOutTopLeft;\n  animation-name: fadeOutTopLeft;\n}\n@-webkit-keyframes fadeOutTopRight {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, -100%, 0);\n    transform: translate3d(100%, -100%, 0);\n  }\n}\n@keyframes fadeOutTopRight {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, -100%, 0);\n    transform: translate3d(100%, -100%, 0);\n  }\n}\n.animate__fadeOutTopRight {\n  -webkit-animation-name: fadeOutTopRight;\n  animation-name: fadeOutTopRight;\n}\n@-webkit-keyframes fadeOutBottomRight {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 100%, 0);\n    transform: translate3d(100%, 100%, 0);\n  }\n}\n@keyframes fadeOutBottomRight {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 100%, 0);\n    transform: translate3d(100%, 100%, 0);\n  }\n}\n.animate__fadeOutBottomRight {\n  -webkit-animation-name: fadeOutBottomRight;\n  animation-name: fadeOutBottomRight;\n}\n@-webkit-keyframes fadeOutBottomLeft {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 100%, 0);\n    transform: translate3d(-100%, 100%, 0);\n  }\n}\n@keyframes fadeOutBottomLeft {\n  from {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 100%, 0);\n    transform: translate3d(-100%, 100%, 0);\n  }\n}\n.animate__fadeOutBottomLeft {\n  -webkit-animation-name: fadeOutBottomLeft;\n  animation-name: fadeOutBottomLeft;\n}\n/* Flippers */\n@-webkit-keyframes flip {\n  from {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);\n    -webkit-animation-timing-function: ease-out;\n    animation-timing-function: ease-out;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -190deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -190deg);\n    -webkit-animation-timing-function: ease-out;\n    animation-timing-function: ease-out;\n  }\n\n  50% {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -170deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -170deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)\n      rotate3d(0, 1, 0, 0deg);\n    transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)\n      rotate3d(0, 1, 0, 0deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n}\n@keyframes flip {\n  from {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);\n    -webkit-animation-timing-function: ease-out;\n    animation-timing-function: ease-out;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -190deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -190deg);\n    -webkit-animation-timing-function: ease-out;\n    animation-timing-function: ease-out;\n  }\n\n  50% {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -170deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)\n      rotate3d(0, 1, 0, -170deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)\n      rotate3d(0, 1, 0, 0deg);\n    transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)\n      rotate3d(0, 1, 0, 0deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);\n    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n}\n.animate__animated.animate__flip {\n  -webkit-backface-visibility: visible;\n  backface-visibility: visible;\n  -webkit-animation-name: flip;\n  animation-name: flip;\n}\n@-webkit-keyframes flipInX {\n  from {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n    opacity: 0;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  60% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);\n  }\n\n  to {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n}\n@keyframes flipInX {\n  from {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n    opacity: 0;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  60% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);\n  }\n\n  to {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n}\n.animate__flipInX {\n  -webkit-backface-visibility: visible !important;\n  backface-visibility: visible !important;\n  -webkit-animation-name: flipInX;\n  animation-name: flipInX;\n}\n@-webkit-keyframes flipInY {\n  from {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n    opacity: 0;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  60% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);\n  }\n\n  to {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n}\n@keyframes flipInY {\n  from {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n    opacity: 0;\n  }\n\n  40% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);\n    -webkit-animation-timing-function: ease-in;\n    animation-timing-function: ease-in;\n  }\n\n  60% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);\n  }\n\n  to {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n}\n.animate__flipInY {\n  -webkit-backface-visibility: visible !important;\n  backface-visibility: visible !important;\n  -webkit-animation-name: flipInY;\n  animation-name: flipInY;\n}\n@-webkit-keyframes flipOutX {\n  from {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n\n  30% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    opacity: 0;\n  }\n}\n@keyframes flipOutX {\n  from {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n\n  30% {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);\n    opacity: 0;\n  }\n}\n.animate__flipOutX {\n  -webkit-animation-duration: calc(1s * 0.75);\n  animation-duration: calc(1s * 0.75);\n  -webkit-animation-duration: calc(var(--animate-duration) * 0.75);\n  animation-duration: calc(var(--animate-duration) * 0.75);\n  -webkit-animation-name: flipOutX;\n  animation-name: flipOutX;\n  -webkit-backface-visibility: visible !important;\n  backface-visibility: visible !important;\n}\n@-webkit-keyframes flipOutY {\n  from {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n\n  30% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -15deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -15deg);\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    opacity: 0;\n  }\n}\n@keyframes flipOutY {\n  from {\n    -webkit-transform: perspective(400px);\n    transform: perspective(400px);\n  }\n\n  30% {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -15deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, -15deg);\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);\n    opacity: 0;\n  }\n}\n.animate__flipOutY {\n  -webkit-animation-duration: calc(1s * 0.75);\n  animation-duration: calc(1s * 0.75);\n  -webkit-animation-duration: calc(var(--animate-duration) * 0.75);\n  animation-duration: calc(var(--animate-duration) * 0.75);\n  -webkit-backface-visibility: visible !important;\n  backface-visibility: visible !important;\n  -webkit-animation-name: flipOutY;\n  animation-name: flipOutY;\n}\n/* Lightspeed */\n@-webkit-keyframes lightSpeedInRight {\n  from {\n    -webkit-transform: translate3d(100%, 0, 0) skewX(-30deg);\n    transform: translate3d(100%, 0, 0) skewX(-30deg);\n    opacity: 0;\n  }\n\n  60% {\n    -webkit-transform: skewX(20deg);\n    transform: skewX(20deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: skewX(-5deg);\n    transform: skewX(-5deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes lightSpeedInRight {\n  from {\n    -webkit-transform: translate3d(100%, 0, 0) skewX(-30deg);\n    transform: translate3d(100%, 0, 0) skewX(-30deg);\n    opacity: 0;\n  }\n\n  60% {\n    -webkit-transform: skewX(20deg);\n    transform: skewX(20deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: skewX(-5deg);\n    transform: skewX(-5deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__lightSpeedInRight {\n  -webkit-animation-name: lightSpeedInRight;\n  animation-name: lightSpeedInRight;\n  -webkit-animation-timing-function: ease-out;\n  animation-timing-function: ease-out;\n}\n@-webkit-keyframes lightSpeedInLeft {\n  from {\n    -webkit-transform: translate3d(-100%, 0, 0) skewX(30deg);\n    transform: translate3d(-100%, 0, 0) skewX(30deg);\n    opacity: 0;\n  }\n\n  60% {\n    -webkit-transform: skewX(-20deg);\n    transform: skewX(-20deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: skewX(5deg);\n    transform: skewX(5deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes lightSpeedInLeft {\n  from {\n    -webkit-transform: translate3d(-100%, 0, 0) skewX(30deg);\n    transform: translate3d(-100%, 0, 0) skewX(30deg);\n    opacity: 0;\n  }\n\n  60% {\n    -webkit-transform: skewX(-20deg);\n    transform: skewX(-20deg);\n    opacity: 1;\n  }\n\n  80% {\n    -webkit-transform: skewX(5deg);\n    transform: skewX(5deg);\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__lightSpeedInLeft {\n  -webkit-animation-name: lightSpeedInLeft;\n  animation-name: lightSpeedInLeft;\n  -webkit-animation-timing-function: ease-out;\n  animation-timing-function: ease-out;\n}\n@-webkit-keyframes lightSpeedOutRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);\n    transform: translate3d(100%, 0, 0) skewX(30deg);\n    opacity: 0;\n  }\n}\n@keyframes lightSpeedOutRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(100%, 0, 0) skewX(30deg);\n    transform: translate3d(100%, 0, 0) skewX(30deg);\n    opacity: 0;\n  }\n}\n.animate__lightSpeedOutRight {\n  -webkit-animation-name: lightSpeedOutRight;\n  animation-name: lightSpeedOutRight;\n  -webkit-animation-timing-function: ease-in;\n  animation-timing-function: ease-in;\n}\n@-webkit-keyframes lightSpeedOutLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(-100%, 0, 0) skewX(-30deg);\n    transform: translate3d(-100%, 0, 0) skewX(-30deg);\n    opacity: 0;\n  }\n}\n@keyframes lightSpeedOutLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(-100%, 0, 0) skewX(-30deg);\n    transform: translate3d(-100%, 0, 0) skewX(-30deg);\n    opacity: 0;\n  }\n}\n.animate__lightSpeedOutLeft {\n  -webkit-animation-name: lightSpeedOutLeft;\n  animation-name: lightSpeedOutLeft;\n  -webkit-animation-timing-function: ease-in;\n  animation-timing-function: ease-in;\n}\n/* Rotating entrances */\n@-webkit-keyframes rotateIn {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -200deg);\n    transform: rotate3d(0, 0, 1, -200deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n@keyframes rotateIn {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -200deg);\n    transform: rotate3d(0, 0, 1, -200deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n.animate__rotateIn {\n  -webkit-animation-name: rotateIn;\n  animation-name: rotateIn;\n  -webkit-transform-origin: center;\n  transform-origin: center;\n}\n@-webkit-keyframes rotateInDownLeft {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n@keyframes rotateInDownLeft {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n.animate__rotateInDownLeft {\n  -webkit-animation-name: rotateInDownLeft;\n  animation-name: rotateInDownLeft;\n  -webkit-transform-origin: left bottom;\n  transform-origin: left bottom;\n}\n@-webkit-keyframes rotateInDownRight {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n@keyframes rotateInDownRight {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n.animate__rotateInDownRight {\n  -webkit-animation-name: rotateInDownRight;\n  animation-name: rotateInDownRight;\n  -webkit-transform-origin: right bottom;\n  transform-origin: right bottom;\n}\n@-webkit-keyframes rotateInUpLeft {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n@keyframes rotateInUpLeft {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n.animate__rotateInUpLeft {\n  -webkit-animation-name: rotateInUpLeft;\n  animation-name: rotateInUpLeft;\n  -webkit-transform-origin: left bottom;\n  transform-origin: left bottom;\n}\n@-webkit-keyframes rotateInUpRight {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -90deg);\n    transform: rotate3d(0, 0, 1, -90deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n@keyframes rotateInUpRight {\n  from {\n    -webkit-transform: rotate3d(0, 0, 1, -90deg);\n    transform: rotate3d(0, 0, 1, -90deg);\n    opacity: 0;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n    opacity: 1;\n  }\n}\n.animate__rotateInUpRight {\n  -webkit-animation-name: rotateInUpRight;\n  animation-name: rotateInUpRight;\n  -webkit-transform-origin: right bottom;\n  transform-origin: right bottom;\n}\n/* Rotating exits */\n@-webkit-keyframes rotateOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 200deg);\n    transform: rotate3d(0, 0, 1, 200deg);\n    opacity: 0;\n  }\n}\n@keyframes rotateOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 200deg);\n    transform: rotate3d(0, 0, 1, 200deg);\n    opacity: 0;\n  }\n}\n.animate__rotateOut {\n  -webkit-animation-name: rotateOut;\n  animation-name: rotateOut;\n  -webkit-transform-origin: center;\n  transform-origin: center;\n}\n@-webkit-keyframes rotateOutDownLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n}\n@keyframes rotateOutDownLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 45deg);\n    transform: rotate3d(0, 0, 1, 45deg);\n    opacity: 0;\n  }\n}\n.animate__rotateOutDownLeft {\n  -webkit-animation-name: rotateOutDownLeft;\n  animation-name: rotateOutDownLeft;\n  -webkit-transform-origin: left bottom;\n  transform-origin: left bottom;\n}\n@-webkit-keyframes rotateOutDownRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n}\n@keyframes rotateOutDownRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n}\n.animate__rotateOutDownRight {\n  -webkit-animation-name: rotateOutDownRight;\n  animation-name: rotateOutDownRight;\n  -webkit-transform-origin: right bottom;\n  transform-origin: right bottom;\n}\n@-webkit-keyframes rotateOutUpLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n}\n@keyframes rotateOutUpLeft {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, -45deg);\n    transform: rotate3d(0, 0, 1, -45deg);\n    opacity: 0;\n  }\n}\n.animate__rotateOutUpLeft {\n  -webkit-animation-name: rotateOutUpLeft;\n  animation-name: rotateOutUpLeft;\n  -webkit-transform-origin: left bottom;\n  transform-origin: left bottom;\n}\n@-webkit-keyframes rotateOutUpRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 90deg);\n    transform: rotate3d(0, 0, 1, 90deg);\n    opacity: 0;\n  }\n}\n@keyframes rotateOutUpRight {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: rotate3d(0, 0, 1, 90deg);\n    transform: rotate3d(0, 0, 1, 90deg);\n    opacity: 0;\n  }\n}\n.animate__rotateOutUpRight {\n  -webkit-animation-name: rotateOutUpRight;\n  animation-name: rotateOutUpRight;\n  -webkit-transform-origin: right bottom;\n  transform-origin: right bottom;\n}\n/* Specials */\n@-webkit-keyframes hinge {\n  0% {\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n  }\n\n  20%,\n  60% {\n    -webkit-transform: rotate3d(0, 0, 1, 80deg);\n    transform: rotate3d(0, 0, 1, 80deg);\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n  }\n\n  40%,\n  80% {\n    -webkit-transform: rotate3d(0, 0, 1, 60deg);\n    transform: rotate3d(0, 0, 1, 60deg);\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 700px, 0);\n    transform: translate3d(0, 700px, 0);\n    opacity: 0;\n  }\n}\n@keyframes hinge {\n  0% {\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n  }\n\n  20%,\n  60% {\n    -webkit-transform: rotate3d(0, 0, 1, 80deg);\n    transform: rotate3d(0, 0, 1, 80deg);\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n  }\n\n  40%,\n  80% {\n    -webkit-transform: rotate3d(0, 0, 1, 60deg);\n    transform: rotate3d(0, 0, 1, 60deg);\n    -webkit-animation-timing-function: ease-in-out;\n    animation-timing-function: ease-in-out;\n    opacity: 1;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 700px, 0);\n    transform: translate3d(0, 700px, 0);\n    opacity: 0;\n  }\n}\n.animate__hinge {\n  -webkit-animation-duration: calc(1s * 2);\n  animation-duration: calc(1s * 2);\n  -webkit-animation-duration: calc(var(--animate-duration) * 2);\n  animation-duration: calc(var(--animate-duration) * 2);\n  -webkit-animation-name: hinge;\n  animation-name: hinge;\n  -webkit-transform-origin: top left;\n  transform-origin: top left;\n}\n@-webkit-keyframes jackInTheBox {\n  from {\n    opacity: 0;\n    -webkit-transform: scale(0.1) rotate(30deg);\n    transform: scale(0.1) rotate(30deg);\n    -webkit-transform-origin: center bottom;\n    transform-origin: center bottom;\n  }\n\n  50% {\n    -webkit-transform: rotate(-10deg);\n    transform: rotate(-10deg);\n  }\n\n  70% {\n    -webkit-transform: rotate(3deg);\n    transform: rotate(3deg);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n}\n@keyframes jackInTheBox {\n  from {\n    opacity: 0;\n    -webkit-transform: scale(0.1) rotate(30deg);\n    transform: scale(0.1) rotate(30deg);\n    -webkit-transform-origin: center bottom;\n    transform-origin: center bottom;\n  }\n\n  50% {\n    -webkit-transform: rotate(-10deg);\n    transform: rotate(-10deg);\n  }\n\n  70% {\n    -webkit-transform: rotate(3deg);\n    transform: rotate(3deg);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: scale(1);\n    transform: scale(1);\n  }\n}\n.animate__jackInTheBox {\n  -webkit-animation-name: jackInTheBox;\n  animation-name: jackInTheBox;\n}\n/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */\n@-webkit-keyframes rollIn {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);\n    transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes rollIn {\n  from {\n    opacity: 0;\n    -webkit-transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);\n    transform: translate3d(-100%, 0, 0) rotate3d(0, 0, 1, -120deg);\n  }\n\n  to {\n    opacity: 1;\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__rollIn {\n  -webkit-animation-name: rollIn;\n  animation-name: rollIn;\n}\n/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */\n@-webkit-keyframes rollOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0) rotate3d(0, 0, 1, 120deg);\n    transform: translate3d(100%, 0, 0) rotate3d(0, 0, 1, 120deg);\n  }\n}\n@keyframes rollOut {\n  from {\n    opacity: 1;\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: translate3d(100%, 0, 0) rotate3d(0, 0, 1, 120deg);\n    transform: translate3d(100%, 0, 0) rotate3d(0, 0, 1, 120deg);\n  }\n}\n.animate__rollOut {\n  -webkit-animation-name: rollOut;\n  animation-name: rollOut;\n}\n/* Zooming entrances */\n@-webkit-keyframes zoomIn {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  50% {\n    opacity: 1;\n  }\n}\n@keyframes zoomIn {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  50% {\n    opacity: 1;\n  }\n}\n.animate__zoomIn {\n  -webkit-animation-name: zoomIn;\n  animation-name: zoomIn;\n}\n@-webkit-keyframes zoomInDown {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomInDown {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomInDown {\n  -webkit-animation-name: zoomInDown;\n  animation-name: zoomInDown;\n}\n@-webkit-keyframes zoomInLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomInLeft {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomInLeft {\n  -webkit-animation-name: zoomInLeft;\n  animation-name: zoomInLeft;\n}\n@-webkit-keyframes zoomInRight {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomInRight {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomInRight {\n  -webkit-animation-name: zoomInRight;\n  animation-name: zoomInRight;\n}\n@-webkit-keyframes zoomInUp {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomInUp {\n  from {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  60% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomInUp {\n  -webkit-animation-name: zoomInUp;\n  animation-name: zoomInUp;\n}\n/* Zooming exits */\n@-webkit-keyframes zoomOut {\n  from {\n    opacity: 1;\n  }\n\n  50% {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  to {\n    opacity: 0;\n  }\n}\n@keyframes zoomOut {\n  from {\n    opacity: 1;\n  }\n\n  50% {\n    opacity: 0;\n    -webkit-transform: scale3d(0.3, 0.3, 0.3);\n    transform: scale3d(0.3, 0.3, 0.3);\n  }\n\n  to {\n    opacity: 0;\n  }\n}\n.animate__zoomOut {\n  -webkit-animation-name: zoomOut;\n  animation-name: zoomOut;\n}\n@-webkit-keyframes zoomOutDown {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomOutDown {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomOutDown {\n  -webkit-animation-name: zoomOutDown;\n  animation-name: zoomOutDown;\n  -webkit-transform-origin: center bottom;\n  transform-origin: center bottom;\n}\n@-webkit-keyframes zoomOutLeft {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale(0.1) translate3d(-2000px, 0, 0);\n    transform: scale(0.1) translate3d(-2000px, 0, 0);\n  }\n}\n@keyframes zoomOutLeft {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale(0.1) translate3d(-2000px, 0, 0);\n    transform: scale(0.1) translate3d(-2000px, 0, 0);\n  }\n}\n.animate__zoomOutLeft {\n  -webkit-animation-name: zoomOutLeft;\n  animation-name: zoomOutLeft;\n  -webkit-transform-origin: left center;\n  transform-origin: left center;\n}\n@-webkit-keyframes zoomOutRight {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale(0.1) translate3d(2000px, 0, 0);\n    transform: scale(0.1) translate3d(2000px, 0, 0);\n  }\n}\n@keyframes zoomOutRight {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale(0.1) translate3d(2000px, 0, 0);\n    transform: scale(0.1) translate3d(2000px, 0, 0);\n  }\n}\n.animate__zoomOutRight {\n  -webkit-animation-name: zoomOutRight;\n  animation-name: zoomOutRight;\n  -webkit-transform-origin: right center;\n  transform-origin: right center;\n}\n@-webkit-keyframes zoomOutUp {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n@keyframes zoomOutUp {\n  40% {\n    opacity: 1;\n    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);\n  }\n\n  to {\n    opacity: 0;\n    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);\n    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);\n    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);\n  }\n}\n.animate__zoomOutUp {\n  -webkit-animation-name: zoomOutUp;\n  animation-name: zoomOutUp;\n  -webkit-transform-origin: center bottom;\n  transform-origin: center bottom;\n}\n/* Sliding entrances */\n@-webkit-keyframes slideInDown {\n  from {\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes slideInDown {\n  from {\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__slideInDown {\n  -webkit-animation-name: slideInDown;\n  animation-name: slideInDown;\n}\n@-webkit-keyframes slideInLeft {\n  from {\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes slideInLeft {\n  from {\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__slideInLeft {\n  -webkit-animation-name: slideInLeft;\n  animation-name: slideInLeft;\n}\n@-webkit-keyframes slideInRight {\n  from {\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes slideInRight {\n  from {\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__slideInRight {\n  -webkit-animation-name: slideInRight;\n  animation-name: slideInRight;\n}\n@-webkit-keyframes slideInUp {\n  from {\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n@keyframes slideInUp {\n  from {\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n    visibility: visible;\n  }\n\n  to {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n}\n.animate__slideInUp {\n  -webkit-animation-name: slideInUp;\n  animation-name: slideInUp;\n}\n/* Sliding exits */\n@-webkit-keyframes slideOutDown {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n}\n@keyframes slideOutDown {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(0, 100%, 0);\n    transform: translate3d(0, 100%, 0);\n  }\n}\n.animate__slideOutDown {\n  -webkit-animation-name: slideOutDown;\n  animation-name: slideOutDown;\n}\n@-webkit-keyframes slideOutLeft {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n}\n@keyframes slideOutLeft {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(-100%, 0, 0);\n    transform: translate3d(-100%, 0, 0);\n  }\n}\n.animate__slideOutLeft {\n  -webkit-animation-name: slideOutLeft;\n  animation-name: slideOutLeft;\n}\n@-webkit-keyframes slideOutRight {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n}\n@keyframes slideOutRight {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(100%, 0, 0);\n    transform: translate3d(100%, 0, 0);\n  }\n}\n.animate__slideOutRight {\n  -webkit-animation-name: slideOutRight;\n  animation-name: slideOutRight;\n}\n@-webkit-keyframes slideOutUp {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n}\n@keyframes slideOutUp {\n  from {\n    -webkit-transform: translate3d(0, 0, 0);\n    transform: translate3d(0, 0, 0);\n  }\n\n  to {\n    visibility: hidden;\n    -webkit-transform: translate3d(0, -100%, 0);\n    transform: translate3d(0, -100%, 0);\n  }\n}\n.animate__slideOutUp {\n  -webkit-animation-name: slideOutUp;\n  animation-name: slideOutUp;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (cssWithMappingToString) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item);
+
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+
+      return content;
+    }).join("");
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === "string") {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, ""]];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
 
 /***/ }),
 
@@ -22871,6 +22348,19 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
+/***/ "./resources/sass/canvas-ui.scss":
+/*!***************************************!*\
+  !*** ./resources/sass/canvas-ui.scss ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./resources/css/app.css":
 /*!*******************************!*\
   !*** ./resources/css/app.css ***!
@@ -23076,6 +22566,326 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 
+/***/ }),
+
+/***/ "./node_modules/animate.css/animate.css":
+/*!**********************************************!*\
+  !*** ./node_modules/animate.css/animate.css ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_animate_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!../postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./animate.css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-10[0].rules[0].use[2]!./node_modules/animate.css/animate.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_animate_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_css_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_10_0_rules_0_use_2_animate_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \****************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var isOldIE = function isOldIE() {
+  var memo;
+  return function memorize() {
+    if (typeof memo === 'undefined') {
+      // Test for IE <= 9 as proposed by Browserhacks
+      // @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+      // Tests for existence of standard globals is to allow style-loader
+      // to operate correctly into non-standard environments
+      // @see https://github.com/webpack-contrib/style-loader/issues/177
+      memo = Boolean(window && document && document.all && !window.atob);
+    }
+
+    return memo;
+  };
+}();
+
+var getTarget = function getTarget() {
+  var memo = {};
+  return function memorize(target) {
+    if (typeof memo[target] === 'undefined') {
+      var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
+
+      if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+        try {
+          // This will throw an exception if access to iframe is blocked
+          // due to cross-origin restrictions
+          styleTarget = styleTarget.contentDocument.head;
+        } catch (e) {
+          // istanbul ignore next
+          styleTarget = null;
+        }
+      }
+
+      memo[target] = styleTarget;
+    }
+
+    return memo[target];
+  };
+}();
+
+var stylesInDom = [];
+
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+
+  for (var i = 0; i < stylesInDom.length; i++) {
+    if (stylesInDom[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var index = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3]
+    };
+
+    if (index !== -1) {
+      stylesInDom[index].references++;
+      stylesInDom[index].updater(obj);
+    } else {
+      stylesInDom.push({
+        identifier: identifier,
+        updater: addStyle(obj, options),
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
+}
+
+function insertStyleElement(options) {
+  var style = document.createElement('style');
+  var attributes = options.attributes || {};
+
+  if (typeof attributes.nonce === 'undefined') {
+    var nonce =  true ? __webpack_require__.nc : 0;
+
+    if (nonce) {
+      attributes.nonce = nonce;
+    }
+  }
+
+  Object.keys(attributes).forEach(function (key) {
+    style.setAttribute(key, attributes[key]);
+  });
+
+  if (typeof options.insert === 'function') {
+    options.insert(style);
+  } else {
+    var target = getTarget(options.insert || 'head');
+
+    if (!target) {
+      throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+    }
+
+    target.appendChild(style);
+  }
+
+  return style;
+}
+
+function removeStyleElement(style) {
+  // istanbul ignore if
+  if (style.parentNode === null) {
+    return false;
+  }
+
+  style.parentNode.removeChild(style);
+}
+/* istanbul ignore next  */
+
+
+var replaceText = function replaceText() {
+  var textStore = [];
+  return function replace(index, replacement) {
+    textStore[index] = replacement;
+    return textStore.filter(Boolean).join('\n');
+  };
+}();
+
+function applyToSingletonTag(style, index, remove, obj) {
+  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
+
+  /* istanbul ignore if  */
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = replaceText(index, css);
+  } else {
+    var cssNode = document.createTextNode(css);
+    var childNodes = style.childNodes;
+
+    if (childNodes[index]) {
+      style.removeChild(childNodes[index]);
+    }
+
+    if (childNodes.length) {
+      style.insertBefore(cssNode, childNodes[index]);
+    } else {
+      style.appendChild(cssNode);
+    }
+  }
+}
+
+function applyToTag(style, options, obj) {
+  var css = obj.css;
+  var media = obj.media;
+  var sourceMap = obj.sourceMap;
+
+  if (media) {
+    style.setAttribute('media', media);
+  } else {
+    style.removeAttribute('media');
+  }
+
+  if (sourceMap && typeof btoa !== 'undefined') {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  } // For old IE
+
+  /* istanbul ignore if  */
+
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    while (style.firstChild) {
+      style.removeChild(style.firstChild);
+    }
+
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var singleton = null;
+var singletonCounter = 0;
+
+function addStyle(obj, options) {
+  var style;
+  var update;
+  var remove;
+
+  if (options.singleton) {
+    var styleIndex = singletonCounter++;
+    style = singleton || (singleton = insertStyleElement(options));
+    update = applyToSingletonTag.bind(null, style, styleIndex, false);
+    remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+  } else {
+    style = insertStyleElement(options);
+    update = applyToTag.bind(null, style, options);
+
+    remove = function remove() {
+      removeStyleElement(style);
+    };
+  }
+
+  update(obj);
+  return function updateStyle(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) {
+        return;
+      }
+
+      update(obj = newObj);
+    } else {
+      remove();
+    }
+  };
+}
+
+module.exports = function (list, options) {
+  options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+  // tags it will allow on a page
+
+  if (!options.singleton && typeof options.singleton !== 'boolean') {
+    options.singleton = isOldIE();
+  }
+
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+
+    if (Object.prototype.toString.call(newList) !== '[object Array]') {
+      return;
+    }
+
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDom[index].references--;
+    }
+
+    var newLastIdentifiers = modulesToDom(newList, options);
+
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDom[_index].references === 0) {
+        stylesInDom[_index].updater();
+
+        stylesInDom.splice(_index, 1);
+      }
+    }
+
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
+/***/ "./node_modules/axios/package.json":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/package.json ***!
+  \*****************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+
 /***/ })
 
 /******/ 	});
@@ -23143,6 +22953,18 @@ process.umask = function() { return 0; };
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -23201,7 +23023,8 @@ process.umask = function() { return 0; };
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
-/******/ 			"css/app": 0
+/******/ 			"css/app": 0,
+/******/ 			"css/canvas-ui": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -23251,8 +23074,9 @@ process.umask = function() { return 0; };
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/app","css/canvas-ui"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/app","css/canvas-ui"], () => (__webpack_require__("./resources/sass/canvas-ui.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app","css/canvas-ui"], () => (__webpack_require__("./resources/css/app.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
